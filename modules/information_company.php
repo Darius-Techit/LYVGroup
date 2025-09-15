@@ -4,7 +4,7 @@ require('../sidebar.php');
 <main id="main" class="main">
     <section class="section">
         <div class="row">
-            <div class="col-lg-7 px-1">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Information List</h5>
@@ -48,7 +48,7 @@ require('../sidebar.php');
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5 px-1">
+            <!-- <div class="col-lg-5 px-1">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Information Picture</h5>
@@ -80,7 +80,7 @@ require('../sidebar.php');
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
 </main>
@@ -95,15 +95,15 @@ require('../sidebar.php');
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <input type="hidden" class="form-control" name="ID" id="ID">
-                        <div class="col-md-6">
+                        <input type="hidden" class="form-control" name="ID_Info_Image" id="ID_Info_Image">
+                        <!-- <div class="col-md-6">
                             <label class="form-label">Image Type</label>
                             <select class="form-select" aria-label="Default select example" id="img_type" name="img_type">
                                 <option value="" selected></option>
                                 <option value="home">Panel Home</option>
                                 <option value="news">Panel News</option>
                             </select>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-12">
                             <!-- <label class="form-label">Information Picture</label> -->

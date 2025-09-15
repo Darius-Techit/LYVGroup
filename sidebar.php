@@ -264,6 +264,12 @@ include_once("languages/languages.php");
                 </ul>
             </li> -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="information_company.php">
+                    <i class="bi bi-info-circle"></i>
+                    <span>Information</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="department.php">
                     <i class="bi bi-file-earmark-person"></i>
                     <span><?= $department ?></span>
@@ -343,7 +349,7 @@ include_once("languages/languages.php");
     <script src="../plugins/validation/jquery.validate-init.js"></script>
 
     <script src="../js/department.js"></script>
-    <!-- <script src="../js/information_company.js"></script> -->
+    <script src="../js/information_company.js"></script>
     <script src="../js/work_list.js"></script>
     <!-- <script src="../js/list_applicant.js"></script> -->
     <script src="../js/content_company.js"></script>

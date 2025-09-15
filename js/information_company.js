@@ -193,46 +193,94 @@ function addInfo(check) {
 
 
     $("#create-info").validate({
-        rules: {
-            img_type: { required: true },
-        },
-        messages: {
-            img_type: { required: "Please choose Image type" },
-
-        },
         submitHandler: () => {
-            if ($("#saveInfo").attr("check") == 1) {
-                $.ajax({
-                    url: "../data/data_information_company.php?Action=InsertInfo",
-                    type: "POST",
-                    data: new FormData($("#create-info")[0]),
-                    contentType: false,
-                    processData: false,
-                    success: (json) => {
-                        let res = JSON.parse(json);
-                        if (res.status === "Success") {
-                            toastr.success(res.message, "Info");
-                            $("#modalInfo").modal("hide");
-                            $("#tb_info_company").DataTable().ajax.reload();
-                        } else {
-                            toastr.error(res.message, "Info");
-                        }
-                    },
-                });
-            } else {
-                $.ajax({
-
-                });
-            }
+            let action = ($("#saveInfo").attr("check") == 1) ? "InsertInfo" : "UpdateInfo";
+            $.ajax({
+                url: "../data/data_information_company.php?Action=" + action,
+                type: "POST",
+                data: new FormData($("#create-info")[0]),
+                contentType: false,
+                processData: false,
+                success: (json) => {
+                    let res = JSON.parse(json);
+                    if (res.status === "Success") {
+                        toastr.success(res.message, "Info");
+                        $("#modalInfo").modal("hide");
+                        $("#tb_info_company").DataTable().ajax.reload();
+                    } else {
+                        toastr.error(res.message, "Info");
+                    }
+                },
+            });
         }
     });
 }
 function editInfo() {
-    $("#modalInfo").modal("show");
-    $("#modal_title").html("Edit Information");
-
     let table = $("#tb_info_company").DataTable();
     let row = getSelectedRow(table);
     console.log(row);
-    // addInfo(2);
+    if (row) {
+
+        $("#ID_Info_Image").val(row.ID_Info_Image);
+        const images = row.Info_Image.split("[]");
+        if (images[0] !== "") {
+            $(`#preview-img-info1`).attr("src", images[0]).show();
+            $(`#image-icon-info1`).hide();
+            $(`#image-info1-hidden`).val(images[0].trim());
+            $(`#close-image-info1`).show();
+        }
+        $("#modalInfo").modal("show");
+        $("#modal_title").html("Edit Information");
+        addInfo(2);
+    } else {
+        toastr.warning("Please choose row need Edit", "Info");
+    }
+
+}
+function removeInfo() {
+    let table = $("#tb_info_company").DataTable();
+    let row = getSelectedRow(table);
+    if (row) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "../data/data_information_company.php?Action=DeleteInfo",
+                    type: "POST",
+                    data: {
+                        ID_Info_Image: row.ID_Info_Image
+                    },
+                    success: (json) => {
+                        let res = JSON.parse(json);
+                        if (res.status === "Success") {
+                            Swal.fire({
+                                icon: "success",
+                                title: res.message,
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                            $("#tb_info_company").DataTable().ajax.reload();
+                        } else {
+                            Swal.fire({
+                                title: res.message,
+                                icon: "error",
+                                confirmButtonText: 'OK',
+                                timer: 1000
+                            });
+                        }
+                    }
+                });
+
+            }
+        });
+    } else {
+        toastr.warning("Please choose row need Delete", "Info");
+    }
 }
