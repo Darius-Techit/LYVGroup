@@ -1,14 +1,3 @@
-toastr.options = {
-    closeButton: true,
-    newestOnTop: false,
-    progressBar: true,
-    positionClass: "toast-top-right",
-    preventDuplicates: false,
-    onclick: null,
-    showDuration: "300",
-    timeOut: "2000",
-};
-
 $(function () {
     onQueryContent();
 });
@@ -189,11 +178,18 @@ function addContent(check) {
     }
 
     $("#create-content").validate({
+        ignore: [], // rất quan trọng, để không bỏ qua textarea ẩn
         rules: {
-            PostEditor: { required: true }
+            PostEditor: {
+                required: function () {
+                    return !window.editors["PostEditor"].getData().trim();
+                }
+            },
         },
-        message: {
-            PostEditor: { required: "Please enter News Content" }
+        messages: {
+            PostEditor: {
+                required: "Please enter News Content"
+            },
         },
         submitHandler: () => {
             Promise.all([

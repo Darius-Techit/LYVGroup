@@ -5,13 +5,35 @@ toastr.options = {
     positionClass: "toast-top-right",
     preventDuplicates: false,
     onclick: null,
-    showDuration: "300",
-    timeOut: "2000",
+    showDuration: "600",
+    timeOut: "5000",
 };
 $(function () {
     onQueryDep();
 
 });
+let languages = localStorage.getItem("languages");
+const translations = {
+    en: {
+        add_department: "Add Department",
+        edit_department: "Edit Department",
+        required_depname: "Please enter Department Name",
+        alert_choose_row: "Please select a row first!",
+    },
+    vn: {
+        add_department: "Thêm Bộ Phận",
+        edit_department: "Chỉnh sửa bộ phận",
+        required_depname: "Vui lòng nhập tên bộ phận",
+        alert_choose_row: "Vui lòng! bạn cần phải chọn 1 dòng trong bảng dữ liệu",
+    }
+}
+function getTranslation(lang, key) {
+    if (translations[lang] && translations[lang][key]) {
+        return translations[lang][key];
+    }
+    return translations.en[key];
+}
+
 function getSelectedRow(table) {
     return table.rows(".selected").data()[0];
 }
@@ -50,7 +72,7 @@ function addDep(check) {
     $("#saveDept").attr("check", check);
     if ($("#saveDept").attr("check") == 1) {
         $("#modalDepartment").modal("show");
-        $("#modal_title").html("Add Department");
+        $("#modal_title").html(getTranslation(languages, "add_department"));
 
         $("#DepName").val("");
         $("#DepNameEN").val("");
@@ -63,46 +85,27 @@ function addDep(check) {
             DepName: { required: true }
         },
         messages: {
-            DepName: { required: "Please enter Department Name" }
+            DepName: { required: getTranslation(languages, "required_depname") }
         },
         submitHandler: () => {
-            if ($("#saveDept").attr("check") == 1) {
-                $.ajax({
-                    url: "../data/data_department.php?Action=InsertDep",
-                    data: new FormData(document.getElementById('create-department')),
-                    type: "POST",
-                    contentType: false,
-                    processData: false,
-                    success: (json) => {
-                        res = JSON.parse(json);
-                        if (res.status == "Success") {
-                            toastr.success(res.message, "Info");
-                            $("#modalDepartment").modal("hide");
-                            $("#tb_department").DataTable().ajax.reload();
-                        } else {
-                            toastr.error(res.message, "Info");
-                        }
-                    },
-                });
-            } else {
-                $.ajax({
-                    url: "../data/data_department.php?Action=UpdateDep",
-                    data: new FormData(document.getElementById('create-department')),
-                    type: "POST",
-                    contentType: false,
-                    processData: false,
-                    success: (json) => {
-                        res = JSON.parse(json);
-                        if (res.status == "Success") {
-                            toastr.success(res.message, "Info");
-                            $("#modalDepartment").modal("hide");
-                            $("#tb_department").DataTable().ajax.reload();
-                        } else {
-                            toastr.error(res.message, "Info");
-                        }
-                    },
-                });
-            }
+            let action = ($("#saveDept").attr("check") == 1) ? "InsertDep" : "UpdateDep";
+            $.ajax({
+                url: "../data/data_department.php?Action=" + action,
+                data: new FormData(document.getElementById('create-department')),
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: (json) => {
+                    res = JSON.parse(json);
+                    if (res.status == "Success") {
+                        toastr.success(res.message);
+                        $("#modalDepartment").modal("hide");
+                        $("#tb_department").DataTable().ajax.reload();
+                    } else {
+                        toastr.error(res.message);
+                    }
+                },
+            });
         },
     });
 }
@@ -111,7 +114,7 @@ function editDep() {
     let row = getSelectedRow(table);
     if (row) {
         $("#modalDepartment").modal("show");
-        $("#modal_title").html("Edit Department");
+        $("#modal_title").html(getTranslation(languages, "edit_department"));
 
         $("#DepID").val(row.Dep_ID);
         $("#DepName").val(row.Dep_Name);
@@ -121,7 +124,7 @@ function editDep() {
         addDep(2);
     }
     else {
-        toastr.warning("Please choose row need Edit", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }
 function removeDep() {
@@ -169,6 +172,6 @@ function removeDep() {
             }
         });
     } else {
-        toastr.warning("Please choose row need Delete", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }

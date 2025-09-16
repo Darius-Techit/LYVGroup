@@ -33,7 +33,7 @@ require('../sidebar.php');
                             <div class="col-md-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
                                 <button type="submit" class="btn btn-primary form-control" onclick="onQueryContent()">
-                                    <i class="bi bi-search"></i> Search</button>
+                                    <i class="bi bi-search"></i> <?= $search ?></button>
                             </div>
                         </div>
 
@@ -42,13 +42,13 @@ require('../sidebar.php');
                                 style="display: flex; gap: 10px; align-items: center;">
 
                                 <button type="button" class="btn btn-outline-primary"
-                                    onclick="addContent(1)"><i class="bi bi-plus-square"></i> Add
+                                    onclick="addContent(1)"><i class="bi bi-plus-square"></i> <?= $add ?>
                                 </button>
                                 <button type="button" class="btn btn-outline-warning"
-                                    onclick="editContent()"><i class="bi bi-pencil-square"></i> Edit
+                                    onclick="editContent()"><i class="bi bi-pencil-square"></i> <?= $edit ?>
                                 </button>
                                 <button type="button" class="btn btn-outline-danger"
-                                    onclick="removeContent()"><i class="bi bi-trash"></i> Delete
+                                    onclick="removeContent()"><i class="bi bi-trash"></i> <?= $delete ?>
                                 </button>
                             </div>
                         </div>
@@ -81,21 +81,24 @@ require('../sidebar.php');
                         <input type="hidden" class="form-control" name="IDNews" id="IDNews">
                         <div class="col-md-6">
                             <label class="form-label">News Content</label>
-                            <div id="PostEditor" name="PostEditor">
+                            <!-- <div id="PostEditor" name="PostEditor">
 
-                            </div>
+
+                            </div> -->
+                            <textarea class="form-control" id="PostEditor" name="PostEditor"></textarea>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">News Content English</label>
-                            <div id="PostEditorEN" name="PostEditorEN">
+                            <!-- <div id="PostEditorEN" name="PostEditorEN">
 
-                            </div>
+                            </div> -->
+                            <textarea class="form-control" id="PostEditorEN" name="PostEditorEN"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveContent" check="1">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $close ?></button>
+                    <button type="submit" class="btn btn-primary" id="saveContent" check="1"><?= $save ?></button>
                 </div>
             </form>
         </div>

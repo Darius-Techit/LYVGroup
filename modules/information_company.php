@@ -7,7 +7,7 @@ require('../sidebar.php');
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Information List</h5>
+                        <h5 class="card-title"><?= $information ?></h5>
                         <div class="row">
                             <div class="col-4">
                                 <label for="inputNanme4" class="form-label">Your Name</label>
@@ -15,8 +15,8 @@ require('../sidebar.php');
                             </div>
                             <div class="col-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
-                                <button type="submit" class="btn btn-primary" onclick="onQueryInfo()">
-                                    <i class="bi bi-search"></i> Search</button>
+                                <button type="submit" class="btn btn-primary form-control" onclick="onQueryInfo()">
+                                    <i class="bi bi-search"></i> <?= $search ?></button>
                             </div>
                         </div>
 
@@ -25,13 +25,13 @@ require('../sidebar.php');
                                 style="display: flex; gap: 10px; align-items: center;">
 
                                 <button type="button" class="btn btn-outline-primary"
-                                    onclick="addInfo(1)"><i class="bi bi-plus-square"></i> Add
+                                    onclick="addInfo(1)"><i class="bi bi-plus-square"></i> <?= $add ?>
                                 </button>
                                 <button type="button" class="btn btn-outline-warning"
-                                    onclick="editInfo()"><i class="bi bi-pencil-square"></i> Edit
+                                    onclick="editInfo()"><i class="bi bi-pencil-square"></i> <?= $edit ?>
                                 </button>
                                 <button type="button" class="btn btn-outline-danger"
-                                    onclick="removeInfo()"><i class="bi bi-trash"></i> Delete
+                                    onclick="removeInfo()"><i class="bi bi-trash"></i> <?= $delete ?>
                                 </button>
                             </div>
                         </div>
@@ -39,8 +39,8 @@ require('../sidebar.php');
                             <table id="tb_info_company" class="table table-striped table-bordered zero-configuration" style="text-align: center;width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">ID</th>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">Panel</th>
+                                        <!-- <th style="background-color: #337ab7; color: #fff; text-align: center;">ID</th> -->
+                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $panel ?></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -108,7 +108,7 @@ require('../sidebar.php');
                         <div class="col-md-12">
                             <!-- <label class="form-label">Information Picture</label> -->
                             <div>
-                                <label class='form-label-modal mt-3'>Information Picture</label>
+                                <label class='form-label-modal mt-3'><?= $information_picture ?></label>
                                 <div class='col-12 col-sm-6 col-md-4 col-lg-4 position-relative'
                                     style='width: 300px;'>
                                     <label for='image-info1'
@@ -130,8 +130,8 @@ require('../sidebar.php');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveInfo" check="1">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $close ?></button>
+                    <button type="submit" class="btn btn-primary" id="saveInfo" check="1"><?= $save ?></button>
                 </div>
             </form>
         </div>

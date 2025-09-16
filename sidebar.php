@@ -61,7 +61,7 @@ include_once("languages/languages.php");
         label.error {
             color: red;
             margin-top: 2px;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .title {
@@ -175,6 +175,10 @@ include_once("languages/languages.php");
             z-index: 2000 !important;
             /* cao hơn modal (1050) */
         }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -203,12 +207,12 @@ include_once("languages/languages.php");
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <li>
-                        <a class="nav-link dropdown-item d-flex align-items-center <?php echo (@$_SESSION['language'] == 'en') ? 'active' : ''; ?>" onclick="chooseLanguage('en')">
+                        <a class="nav-link dropdown-item d-flex align-items-center cursor-pointer <?php echo (@$_SESSION['language'] == 'en') ? 'active' : ''; ?>" onclick="chooseLanguage('en')">
                             <img src=" ../assets/img/en.png" style="width:30px; object-fit: contain; margin-right:10px" /> <?= $language_en ?>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link dropdown-item d-flex align-items-center <?php echo (@$_SESSION['language'] == 'vn') ? 'active' : ''; ?>" onclick="chooseLanguage('vn')">
+                        <a class="nav-link dropdown-item d-flex align-items-center cursor-pointer <?php echo (@$_SESSION['language'] == 'vn') ? 'active' : ''; ?>" onclick="chooseLanguage('vn')">
                             <img src="../assets/img/vn.png" style="width:30px; object-fit: contain; margin-right:10px" />
                             <?= $language_vn ?>
                         </a>
@@ -226,7 +230,7 @@ include_once("languages/languages.php");
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <hr class="dropdown-divider">
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="../logout.php">
+                        <a class="dropdown-item d-flex align-items-center cursor-pointer" href="../logout.php">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Logout</span>
                         </a>
@@ -266,7 +270,7 @@ include_once("languages/languages.php");
             <li class="nav-item">
                 <a class="nav-link collapsed" href="information_company.php">
                     <i class="bi bi-info-circle"></i>
-                    <span>Information</span>
+                    <span><?= $information ?></span>
                 </a>
             </li>
             <li class="nav-item">
@@ -297,11 +301,11 @@ include_once("languages/languages.php");
                 </a>
             </li>
             <?php if ($permission == 'Administrator') { ?>
-                <li class="nav-heading" style="font-weight: 700;font-size: 14px;">Administrator </li>
+                <li class="nav-heading" style="font-weight: 700;font-size: 14px;"><?= $administrator ?> </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="user_management.php">
                         <i class="bi bi-people-fill"></i>
-                        <span>User Management</span>
+                        <span><?= $usermanagement ?></span>
                     </a>
                 <?php }  ?>
         </ul>

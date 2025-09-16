@@ -11,18 +11,18 @@ require('../sidebar.php');
                         <h5 class="card-title"><?= $department ?></h5>
                         <div class="row">
                             <div class="col-3">
-                                <label class="form-label">Department Name</label>
+                                <label class="form-label"><?= $department_name ?></label>
                                 <input type="text" class="form-control" id="sr_DepName">
                             </div>
                             <div class="col-3">
-                                <label class="form-label">Department Name English</label>
+                                <label class="form-label"><?= $department_nameEN ?></label>
                                 <input type="text" class="form-control" id="sr_DepNameEN">
                             </div>
 
                             <div class="col-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
                                 <button type="submit" class="btn btn-primary form-control" onclick=" onQueryDep()">
-                                    <i class="bi bi-search"></i> Search</button>
+                                    <i class="bi bi-search"></i> <?= $search ?></button>
                             </div>
                         </div>
 
@@ -31,13 +31,13 @@ require('../sidebar.php');
                                 style="display: flex; gap: 10px; align-items: center;">
 
                                 <button type="button" class="btn btn-outline-primary"
-                                    onclick="addDep(1)"><i class="bi bi-plus-square"></i> Add
+                                    onclick="addDep(1)"><i class="bi bi-plus-square"></i> <?= $add ?>
                                 </button>
                                 <button type="button" class="btn btn-outline-warning"
-                                    onclick="editDep()"><i class="bi bi-pencil-square"></i> Edit
+                                    onclick="editDep()"><i class="bi bi-pencil-square"></i> <?= $edit ?>
                                 </button>
                                 <button type="button" class="btn btn-outline-danger"
-                                    onclick="removeDep()"><i class="bi bi-trash"></i> Delete
+                                    onclick="removeDep()"><i class="bi bi-trash"></i> <?= $delete ?>
                                 </button>
                             </div>
                         </div>
@@ -45,8 +45,8 @@ require('../sidebar.php');
                             <table id="tb_department" class="table table-striped table-bordered zero-configuration" style="text-align: center;width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">Department Name</th>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">Department Name English</th>
+                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $department_name ?></th>
+                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $department_nameEN ?></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -69,18 +69,18 @@ require('../sidebar.php');
                     <div class="row">
                         <input type="hidden" class="form-control" name="DepID" id="DepID">
                         <div class="col-md-6">
-                            <label class="form-label">Department Name</label>
+                            <label class="form-label"><?= $department_name ?></label>
                             <input type="text" class="form-control" name="DepName" id="DepName">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Department Name English</label>
+                            <label class="form-label"><?= $department_nameEN ?></label>
                             <input type="text" class="form-control" name="DepNameEN" id="DepNameEN">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveDept" check="1">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $close ?></button>
+                    <button type="submit" class="btn btn-primary" id="saveDept" check="1"><?= $save ?></button>
                 </div>
             </form>
         </div>

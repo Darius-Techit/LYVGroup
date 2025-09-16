@@ -82,46 +82,46 @@ function imageInfo(idImg, previewImg, imgIcon, imgHidden, closeImg) {
         });
 }
 function onQueryInfo() {
-    let childTable = $("#tb_info_pic").DataTable({
-        ajax: {
-            type: "GET",
-            url: "../data/data_information_company.php?Action=GetDataInfoPic",
-            data: function (d) {
-                d.ID_Info_Image = window.ID_Info_Image || '';  // gửi lên server
-            },
-            dataSrc: function (res) {
-                return res;
-            }
+    // let childTable = $("#tb_info_pic").DataTable({
+    //     ajax: {
+    //         type: "GET",
+    //         // url: "../data/data_information_company.php?Action=GetDataInfoPic",
+    //         // data: function (d) {
+    //         //     d.ID_Info_Image = window.ID_Info_Image || '';  // gửi lên server
+    //         // },
+    //         dataSrc: function (res) {
+    //             return res;
+    //         }
 
-        },
-        columns: [
-            {
-                data: "ID_Image",
-            },
-            {
-                data: "Images",
-                render: function (val, type, row) {
-                    if (!val) return "";
+    //     },
+    //     columns: [
+    //         {
+    //             data: "ID_Image",
+    //         },
+    //         {
+    //             data: "Images",
+    //             render: function (val, type, row) {
+    //                 if (!val) return "";
 
-                    const images = val.split("[]");
-                    let html = "<div style='display:flex; gap:4px; flex-wrap:wrap;'>";
+    //                 const images = val.split("[]");
+    //                 let html = "<div style='display:flex; gap:4px; flex-wrap:wrap;'>";
 
-                    images.forEach(src => {
-                        if (src) {
-                            html += `<img src="${src}" 
-                     style="max-width:140px; max-height:100px; height:auto; width:auto; border-radius:4px;" />`;
-                        }
-                    });
-                    html += "</div>";
-                    return html;
-                }
-            }
-        ],
-        destroy: true,
-        searching: false,
-        ordering: true,
-        info: false,
-    });
+    //                 images.forEach(src => {
+    //                     if (src) {
+    //                         html += `<img src="${src}" 
+    //                  style="max-width:140px; max-height:100px; height:auto; width:auto; border-radius:4px;" />`;
+    //                     }
+    //                 });
+    //                 html += "</div>";
+    //                 return html;
+    //             }
+    //         }
+    //     ],
+    //     destroy: true,
+    //     searching: false,
+    //     ordering: true,
+    //     info: false,
+    // });
     let parentTable = $("#tb_info_company").DataTable({
         ajax: {
             type: "GET",
@@ -132,9 +132,9 @@ function onQueryInfo() {
             }
         },
         columns: [
-            {
-                data: "ID_Info_Image",
-            },
+            // {
+            //     data: "ID_Info_Image",
+            // },
             {
                 data: "Info_Image",
                 render: function (val, type, row) {
@@ -146,7 +146,7 @@ function onQueryInfo() {
                     images.forEach(src => {
                         if (src) {
                             html += `<img src="${src}" 
-                     style="max-width:140px; max-height:100px; height:auto; width:auto; border-radius:4px;" />`;
+                     style="max-width:540px; max-height:500px; height:auto; width:auto; border-radius:4px;" />`;
                         }
                     });
                     html += "</div>";
@@ -193,6 +193,17 @@ function addInfo(check) {
 
 
     $("#create-info").validate({
+        ignore: [],
+        rules: {
+            Imageinfo1: {
+                required: true
+            }
+        },
+        messages: {
+            Imageinfo1: {
+                required: "Please upload an image"
+            }
+        },
         submitHandler: () => {
             let action = ($("#saveInfo").attr("check") == 1) ? "InsertInfo" : "UpdateInfo";
             $.ajax({
