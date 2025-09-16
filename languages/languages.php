@@ -58,6 +58,14 @@ switch ($languages) {
         $work_experienceEN = "Kinh nghiệm làm việc (T.Anh)";
         $working_time = "Thời gian làm việc";
         $working_timeEN = "Thời gian làm việc (Tiếng Anh)";
+        $dep_already = "Tên bộ phận đã tồn tại";
+
+        //content_company
+        $news_content = "Nội dung tin tức";
+        $news_contentEN = "Nội dung tin tức (Tiếng Anh)";
+
+        //user management
+        $id_already = "ID người dùng đã tồn tại";
         break;
     default:
         //languages
@@ -111,7 +119,13 @@ switch ($languages) {
         $work_experienceEN = "Work Experience (English)";
         $working_time = "Working Time";
         $working_timeEN = "Working Time (English)";
+        $dep_already = "Department Name already exists";
 
+        //content_company
+        $news_content = "News Content";
+        $news_contentEN = "News Content (English)";
 
+        //user management
+        $id_already = "ID User already exists";
         break;
 }

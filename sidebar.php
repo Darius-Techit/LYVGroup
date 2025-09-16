@@ -352,12 +352,8 @@ include_once("languages/languages.php");
     <script src="../plugins/validation/jquery.validate.min.js"></script>
     <script src="../plugins/validation/jquery.validate-init.js"></script>
 
-    <script src="../js/department.js"></script>
-    <script src="../js/information_company.js"></script>
-    <script src="../js/work_list.js"></script>
+
     <!-- <script src="../js/list_applicant.js"></script> -->
-    <script src="../js/content_company.js"></script>
-    <script src="../js/user_management.js"></script>
     <script type="importmap">
         {
 			"imports": {

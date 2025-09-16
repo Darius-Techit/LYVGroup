@@ -1,8 +1,63 @@
-
+toastr.options = {
+    closeButton: true,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: "300",
+    timeOut: "2000",
+};
 $(function () {
     onQueryWorkList();
     initQuillEditors();
 });
+let languages = localStorage.getItem("languages");
+const translations = {
+    en: {
+        add_work_list: "Add Work",
+        edit_work_list: "Edit Work",
+        required_DepID: "Please choose Department Name",
+        required_number_vacancies: "Please Enter Number Vacancies",
+        required_degree: "Please Enter Degree",
+        required_gender: "Please Enter Gender",
+        required_age_range: "Please Enter Age Requirement",
+        required_salary: "Please Enter Salary",
+        required_work_experience: "Please Enter Work Experience",
+        required_working_time: "Please Enter Working Time",
+        alert_choose_row: "Please select a row first!",
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: 'Cancel',
+    },
+    vn: {
+        add_work_list: "Thêm công việc",
+        edit_work_list: "Chỉnh sửa công việc",
+        required_DepID: "Vui lòng chọn tên bộ phận",
+        required_number_vacancies: "Vui lòng nhập số lượng cần tuyển",
+        required_degree: "Vui lòng nhập Bằng cấp",
+        required_gender: "Vui lòng nhập Giới tính",
+        required_age_range: "Vui lòng nhập Độ tuổi",
+        required_salary: "Vui lòng nhập Mức lương",
+        required_work_experience: "Vui lòng nhập Kinh nghiệm làm việc",
+        required_working_time: "Vui lòng nhập Thời gian làm việc",
+        alert_choose_row: "Vui lòng! bạn cần phải chọn 1 dòng trong bảng dữ liệu",
+        title: "Bạn có chắc không?",
+        text: "Bạn sẽ không thể hoàn tác điều này!",
+        confirmButtonText: "Có, xóa!",
+        cancelButtonText: 'Hủy bỏ',
+    }
+}
+function getTranslation(lang, key) {
+    if (translations[lang] && translations[lang][key]) {
+        return translations[lang][key];
+    }
+    return translations.en[key];
+}
+function getSelectedRow(table) {
+    return table.rows(".selected").data()[0];
+}
 function onQueryWorkList() {
     let DepName = $("#sr_DepName").val();
     $("#tb_work_list").DataTable({
@@ -139,7 +194,8 @@ function addWorkList(check) {
     $("#saveWorkList").attr("check", check);
     if ($("#saveWorkList").attr("check") == 1) {
         $("#modalWorkList").modal("show");
-        $("#modal_title").html("Add Work");
+        $("#modal_title").html(getTranslation(languages, "add_work_list"));
+
         unlockSelect("#DepID");
 
         $("#DepID").prop("disabled", false);
@@ -176,29 +232,26 @@ function addWorkList(check) {
         $("#Working_Time-error").hide();
     }
 
-
-
-
     $("#create-worklist").validate({
         rules: {
             DepID: { required: true },
-            // Number_Vacancies: { required: true },
-            // Degree: { required: true },
-            // Gender: { required: true },
-            // Age_Range: { required: true },
-            // Salary: { required: true },
-            // Work_Experience: { required: true },
-            // Working_Time: { required: true }
+            Number_Vacancies: { required: true },
+            Degree: { required: true },
+            Gender: { required: true },
+            Age_Range: { required: true },
+            Salary: { required: true },
+            Work_Experience: { required: true },
+            Working_Time: { required: true }
         },
         messages: {
-            DepID: { required: "Please choose Department Name" },
-            // Number_Vacancies: { required: "Please Enter Number Vacancies" },
-            // Degree: { required: "Please Enter Degree" },
-            // Gender: { required: "Please Enter Gender" },
-            // Age_Range: { required: "Please Enter Age Range" },
-            // Salary: { required: "Please Enter Salary" },
-            // Work_Experience: { required: "Please Enter Work Experience" },
-            // Working_Time: { required: "Please Enter Working Time" }
+            DepID: { required: getTranslation(languages, "required_DepID") },
+            Number_Vacancies: { required: getTranslation(languages, "required_number_vacancies") },
+            Degree: { required: getTranslation(languages, "required_degree") },
+            Gender: { required: getTranslation(languages, "required_gender") },
+            Age_Range: { required: getTranslation(languages, "required_age_range") },
+            Salary: { required: getTranslation(languages, "required_salary") },
+            Work_Experience: { required: getTranslation(languages, "required_work_experience") },
+            Working_Time: { required: getTranslation(languages, "required_working_time") }
 
         },
         submitHandler: () => {
@@ -206,44 +259,25 @@ function addWorkList(check) {
             $("#Job_DescriptionEN_input").val(quills['Job_DescriptionEN']?.root.innerHTML || "");
             $("#Request_Work_input").val(quills['Request_Work']?.root.innerHTML || "");
             $("#Request_WorkEN_input").val(quills['Request_WorkEN']?.root.innerHTML || "");
-            if ($("#saveWorkList").attr("check") == 1) {
-                $.ajax({
-                    url: "../data/data_work_list.php?Action=InsertWL",
-                    data: new FormData(document.getElementById('create-worklist')),
-                    type: "POST",
-                    contentType: false,
-                    processData: false,
-                    success: (json) => {
-                        res = JSON.parse(json);
-                        if (res.status == "Success") {
-                            toastr.success(res.message, "Info");
-                            $("#modalWorkList").modal("hide");
-                            $("#tb_work_list").DataTable().ajax.reload();
-                        } else {
-                            toastr.error(res.message, "Info");
-                        }
-                    },
-                });
-            } else {
-                $.ajax({
-                    url: "../data/data_work_list.php?Action=UpdateWL",
-                    data: new FormData(document.getElementById('create-worklist')),
-                    type: "POST",
-                    contentType: false,
-                    processData: false,
-                    success: (json) => {
-                        res = JSON.parse(json);
-                        if (res.status == "Success") {
-                            toastr.success(res.message, "Info");
-                            $("#modalWorkList").modal("hide");
-                            $("#tb_work_list").DataTable().ajax.reload();
-                        } else {
-                            toastr.error(res.message, "Info");
-                        }
-                    },
-                });
-            }
 
+            let action = ($("#saveWorkList").attr("check") == 1) ? "InsertWL" : "UpdateWL";
+            $.ajax({
+                url: "../data/data_work_list.php?Action=" + action,
+                data: new FormData(document.getElementById('create-worklist')),
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: (json) => {
+                    res = JSON.parse(json);
+                    if (res.status == "Success") {
+                        toastr.success(res.message);
+                        $("#modalWorkList").modal("hide");
+                        $("#tb_work_list").DataTable().ajax.reload();
+                    } else {
+                        toastr.error(res.message);
+                    }
+                },
+            });
         }
     });
 }
@@ -256,7 +290,7 @@ function editWorkList() {
 
     if (row) {
         $("#modalWorkList").modal("show");
-        $("#modal_title").html("Edit Work");
+        $("#modal_title").html(getTranslation(languages, "edit_Work_list"));
 
         //Fill data from table to modal
         quills["Job_Description"].setContents([]);
@@ -292,7 +326,7 @@ function editWorkList() {
         $("#Working_Time-error").hide();
         addWorkList(2);
     } else {
-        toastr.warning("Please choose row need Edit", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }
 function removeWorkList() {
@@ -301,13 +335,14 @@ function removeWorkList() {
     console.log(row);
     if (row) {
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: getTranslation(languages, "title"),
+            text: getTranslation(languages, "text"),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: getTranslation(languages, "confirmButtonText"),
+            cancelButtonText: getTranslation(languages, "cancelButtonText")
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -341,7 +376,7 @@ function removeWorkList() {
             }
         });
     } else {
-        toastr.warning("Please choose row need Delete", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }
 function ShowListApply(Dep_ID) {

@@ -1,6 +1,19 @@
+toastr.options = {
+    closeButton: true,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: "300",
+    timeOut: "2000",
+};
 $(function () {
     onQueryUser();
-})
+});
+function getSelectedRow(table) {
+    return table.rows(".selected").data()[0];
+}
 function onQueryUser() {
     $("#tb_user_management").DataTable({
         ajax: {

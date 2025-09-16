@@ -14,22 +14,6 @@ require('../sidebar.php');
                                 <label for="inputNanme4" class="form-label">Your Name</label>
                                 <input type="text" class="form-control" id="inputNanme4">
                             </div>
-                            <div class="col-md-2">
-                                <label for="inputNanme4" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="inputNanme4">
-                            </div>
-                            <div class="col-md-2">
-                                <label for="inputNanme4" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="inputNanme4">
-                            </div>
-                            <div class="col-md-2">
-                                <label for="inputNanme4" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="inputNanme4">
-                            </div>
-                            <div class="col-md-2">
-                                <label for="inputNanme4" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="inputNanme4">
-                            </div>
                             <div class="col-md-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
                                 <button type="submit" class="btn btn-primary form-control" onclick="onQueryContent()">
@@ -56,8 +40,8 @@ require('../sidebar.php');
                             <table id="tb_content" class="table table-striped table-bordered zero-configuration" style="width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">Post Content</th>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">Post Content English</th>
+                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $news_content ?></th>
+                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $news_contentEN ?></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -80,7 +64,7 @@ require('../sidebar.php');
                     <div class="row g-3">
                         <input type="hidden" class="form-control" name="IDNews" id="IDNews">
                         <div class="col-md-6">
-                            <label class="form-label">News Content</label>
+                            <label class="form-label"><?= $news_content ?></label>
                             <!-- <div id="PostEditor" name="PostEditor">
 
 
@@ -88,7 +72,7 @@ require('../sidebar.php');
                             <textarea class="form-control" id="PostEditor" name="PostEditor"></textarea>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">News Content English</label>
+                            <label class="form-label"><?= $news_contentEN ?></label>
                             <!-- <div id="PostEditorEN" name="PostEditorEN">
 
                             </div> -->
@@ -104,6 +88,7 @@ require('../sidebar.php');
         </div>
     </div>
 </div>
+
 <script type="module">
     import {
         ClassicEditor,
@@ -205,3 +190,4 @@ require('../sidebar.php');
         }
     });
 </script>
+<script src="../js/content_company.js"></script>

@@ -22,7 +22,7 @@ if ($Action == "InsertUser") {
     $rs_check = fetch_to_array($sql_check);
     $tmp_count = count($rs_check);
     if ($tmp_count != 0) {
-        echo json_encode(array("status" => "Error", "message" => "ID User already exists"));
+        echo json_encode(array("status" => "Error", "message" => $id_already));
         exit;
     } else {
         $sql_Insert = "INSERT INTO CO_UserInfor

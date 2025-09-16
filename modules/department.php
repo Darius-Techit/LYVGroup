@@ -85,4 +85,6 @@ require('../sidebar.php');
             </form>
         </div>
     </div>
-</div><!-- End Extra Large Modal-->
+</div>
+<!-- End Extra Large Modal-->
+<script src="../js/department.js"></script>

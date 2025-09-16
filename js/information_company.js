@@ -1,7 +1,15 @@
+toastr.options = {
+    closeButton: true,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: "300",
+    timeOut: "2000",
+};
 $(function () {
     onQueryInfo();
-
-
     imageInfo(
         `image-info1`,
         `preview-img-info1`,
@@ -81,6 +89,39 @@ function imageInfo(idImg, previewImg, imgIcon, imgHidden, closeImg) {
             }
         });
 }
+let languages = localStorage.getItem("languages");
+const translations = {
+    en: {
+        add_information: "Add Information",
+        edit_information: "Edit Information",
+        required_img: "Please upload an image",
+        alert_choose_row: "Please select a row first!",
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: 'Cancel',
+    },
+    vn: {
+        add_information: "Thêm Thông Tin",
+        edit_information: "Chỉnh Sửa Thông Tin",
+        required_img: "Vui lòng tải lên một hình ảnh",
+        alert_choose_row: "Vui lòng! bạn cần phải chọn 1 dòng trong bảng dữ liệu",
+        title: "Bạn có chắc không?",
+        text: "Bạn sẽ không thể hoàn tác điều này!",
+        confirmButtonText: "Có, xóa!",
+        cancelButtonText: 'Hủy bỏ',
+    }
+}
+function getTranslation(lang, key) {
+    if (translations[lang] && translations[lang][key]) {
+        return translations[lang][key];
+    }
+    return translations.en[key];
+}
+
+function getSelectedRow(table) {
+    return table.rows(".selected").data()[0];
+}
 function onQueryInfo() {
     // let childTable = $("#tb_info_pic").DataTable({
     //     ajax: {
@@ -122,7 +163,8 @@ function onQueryInfo() {
     //     ordering: true,
     //     info: false,
     // });
-    let parentTable = $("#tb_info_company").DataTable({
+    // let parentTable = 
+    $("#tb_info_company").DataTable({
         ajax: {
             type: "GET",
             url: "../data/data_information_company.php?Action=GetDataInfo",
@@ -164,19 +206,20 @@ function onQueryInfo() {
         ordering: true,
         info: false,
     });
-    parentTable.on('select', function (e, dt, type, indexes) {
-        if (type === 'row') {
-            let rows = parentTable.row(indexes).data();
-            window.ID_Info_Image = rows.ID_Info_Image;
-            childTable.ajax.reload();
-        }
-    });
+    // parentTable.on('select', function (e, dt, type, indexes) {
+    //     if (type === 'row') {
+    //         let rows = parentTable.row(indexes).data();
+    //         window.ID_Info_Image = rows.ID_Info_Image;
+    //         childTable.ajax.reload();
+    //     }
+    // });
 }
 function addInfo(check) {
     $("#saveInfo").attr("check", check);
     if ($("#saveInfo").attr("check") == 1) {
         $("#modalInfo").modal("show");
-        $("#modal_title").html("Add Information");
+        $("#modal_title").html(getTranslation(languages, "add_information"));
+        $("#image-info1-hidden-error").hide();
 
         // let imgArr = [1];
         // for (let i = 0; i < imgArr.length; i++) {
@@ -189,9 +232,9 @@ function addInfo(check) {
         $(`#image-icon-info1`).show();
         $(`#image-info1-hidden`).val("");
         $(`#close-image-info1`).hide();
+
+
     }
-
-
     $("#create-info").validate({
         ignore: [],
         rules: {
@@ -201,7 +244,7 @@ function addInfo(check) {
         },
         messages: {
             Imageinfo1: {
-                required: "Please upload an image"
+                required: getTranslation(languages, "required_img")
             }
         },
         submitHandler: () => {
@@ -215,11 +258,11 @@ function addInfo(check) {
                 success: (json) => {
                     let res = JSON.parse(json);
                     if (res.status === "Success") {
-                        toastr.success(res.message, "Info");
+                        toastr.success(res.message);
                         $("#modalInfo").modal("hide");
                         $("#tb_info_company").DataTable().ajax.reload();
                     } else {
-                        toastr.error(res.message, "Info");
+                        toastr.error(res.message);
                     }
                 },
             });
@@ -229,7 +272,6 @@ function addInfo(check) {
 function editInfo() {
     let table = $("#tb_info_company").DataTable();
     let row = getSelectedRow(table);
-    console.log(row);
     if (row) {
 
         $("#ID_Info_Image").val(row.ID_Info_Image);
@@ -241,10 +283,12 @@ function editInfo() {
             $(`#close-image-info1`).show();
         }
         $("#modalInfo").modal("show");
-        $("#modal_title").html("Edit Information");
+        $("#modal_title").html(getTranslation(languages, "edit_information"));
+
+        $("#image-info1-hidden-error").hide();
         addInfo(2);
     } else {
-        toastr.warning("Please choose row need Edit", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 
 }
@@ -253,13 +297,14 @@ function removeInfo() {
     let row = getSelectedRow(table);
     if (row) {
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: getTranslation(languages, "title"),
+            text: getTranslation(languages, "text"),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: getTranslation(languages, "confirmButtonText"),
+            cancelButtonText: getTranslation(languages, "cancelButtonText"),
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -292,6 +337,6 @@ function removeInfo() {
             }
         });
     } else {
-        toastr.warning("Please choose row need Delete", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }

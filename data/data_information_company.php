@@ -51,42 +51,34 @@ if ($Action == "InsertInfo") {
 
     $rs_Insert = execute_query($sql_Insert);
     if ($rs_Insert > 0) {
-        echo json_encode(array("status" => "Success", "message" => "Insert Successfully"));
+        echo json_encode(array("status" => "Success", "message" => $insert_successfully));
     } else {
-        echo json_encode(array('status' => "Error", "message" => 'Insert Error!'));
+        echo json_encode(array('status' => "Error", "message" => $insert_error));
     }
 }
 if ($Action == "UpdateInfo") {
     $ID_Info_Image = isset($_POST['ID_Info_Image']) ? $_POST['ID_Info_Image'] : "";
     $images = isset($_POST['Imageinfo1']) ? $_POST['Imageinfo1'] : "";
 
-    if ($ID_Info_Image != "") {
-        $sql_Update = " UPDATE CO_InformationCompany
+    $sql_Update = " UPDATE CO_InformationCompany
                         SET Info_Image = '$images',
                             UserID = '$userid',
                             UserDate = GETDATE() 
                         WHERE ID_Info_Image = '$ID_Info_Image'";
-        $rs_Update = execute_query($sql_Update);
-        if ($rs_Update > 0) {
-            echo json_encode(array("status" => "Success", "message" => "Update Successfully"));
-        } else {
-            echo json_encode(array('status' => "Error", "message" => 'Update Error!'));
-        }
+    $rs_Update = execute_query($sql_Update);
+    if ($rs_Update > 0) {
+        echo json_encode(array("status" => "Success", "message" => $update_successfully));
     } else {
-        echo json_encode(array('status' => "Error", "message" => 'Missing ID_Info_Image!'));
+        echo json_encode(array('status' => "Error", "message" => $update_error));
     }
 }
 if ($Action == "DeleteInfo") {
     $ID_Info_Image = isset($_POST['ID_Info_Image']) ? $_POST['ID_Info_Image'] : "";
-    if ($ID_Info_Image != "") {
-        $sql_Delete = "DELETE FROM CO_InformationCompany WHERE ID_Info_Image = '$ID_Info_Image'";
-        $rs_Delete = execute_query($sql_Delete);
-        if ($rs_Delete > 0) {
-            echo json_encode(array("status" => "Success", "message" => "Delete Successfully"));
-        } else {
-            echo json_encode(array('status' => "Error", "message" => 'Delete Error!'));
-        }
+    $sql_Delete = "DELETE FROM CO_InformationCompany WHERE ID_Info_Image = '$ID_Info_Image'";
+    $rs_Delete = execute_query($sql_Delete);
+    if ($rs_Delete > 0) {
+        echo json_encode(array("status" => "Success", "message" => $deleted_successfully));
     } else {
-        echo json_encode(array('status' => "Error", "message" => 'Missing ID_Info_Image!'));
+        echo json_encode(array('status' => "Error", "message" => $deleted_error));
     }
 }

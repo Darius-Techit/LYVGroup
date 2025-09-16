@@ -106,3 +106,4 @@ require('../sidebar.php');
         </div>
     </div>
 </div>
+<script src="../js/user_management.js"></script>

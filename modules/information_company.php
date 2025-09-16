@@ -137,3 +137,4 @@ require('../sidebar.php');
         </div>
     </div>
 </div>
+<script src="../js/information_company.js"></script>

@@ -5,8 +5,8 @@ toastr.options = {
     positionClass: "toast-top-right",
     preventDuplicates: false,
     onclick: null,
-    showDuration: "600",
-    timeOut: "5000",
+    showDuration: "300",
+    timeOut: "2000",
 };
 $(function () {
     onQueryDep();
@@ -19,12 +19,20 @@ const translations = {
         edit_department: "Edit Department",
         required_depname: "Please enter Department Name",
         alert_choose_row: "Please select a row first!",
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: 'Cancel',
     },
     vn: {
         add_department: "Thêm Bộ Phận",
         edit_department: "Chỉnh sửa bộ phận",
         required_depname: "Vui lòng nhập tên bộ phận",
         alert_choose_row: "Vui lòng! bạn cần phải chọn 1 dòng trong bảng dữ liệu",
+        title: "Bạn có chắc không?",
+        text: "Bạn sẽ không thể hoàn tác điều này!",
+        confirmButtonText: "Có, xóa!",
+        cancelButtonText: 'Hủy bỏ',
     }
 }
 function getTranslation(lang, key) {
@@ -132,13 +140,14 @@ function removeDep() {
     let row = getSelectedRow(table);
     if (row) {
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: getTranslation(languages, "title"),
+            text: getTranslation(languages, "text"),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: getTranslation(languages, "confirmButtonText"),
+            cancelButtonText: getTranslation(languages, "cancelButtonText")
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({

@@ -14,7 +14,8 @@ if ($Action == "GetDataWorkList") {
     $sqlDataWL = "  SELECT  wl.ID, dc.Dep_ID , dc.Dep_Name, wl.Job_Description,wl.Job_DescriptionEN, wl.Request_Work,wl.Request_WorkEN,
                             wl.Degree,wl.DegreeEN, wl.Gender,wl.GenderEN, wl.Age_Range,wl.Age_RangeEN, wl.Salary,wl.SalaryEN,
                             wl.Number_Vacancies, wl.Work_Experience,wl.Work_ExperienceEN, wl.Working_Time,wl.Working_TimeEN,
-                            wl.Job_Hot, wl.UserDate, wl.CreateDate,(SELECT COUNT(Dep_ID) FROM CO_ListApplicant WHERE Dep_ID=wl.Dep_ID) IDListApply
+                            wl.Job_Hot, wl.UserDate, wl.CreateDate,wl.Date_Applications, wl.Position_Level,
+                            (SELECT COUNT(Dep_ID) FROM CO_ListApplicant WHERE Dep_ID=wl.Dep_ID) IDListApply
                     FROM CO_WorkList wl
                     LEFT JOIN CO_DepartmentCompany AS dc ON dc.Dep_ID=wl.Dep_ID
                     WHERE $where";
@@ -46,7 +47,7 @@ if ($Action == "InsertWL") {
     $rs_exists = fetch_to_array($sql_exists);
     $tmp_count = count($rs_exists);
     if ($tmp_count != 0) {
-        echo json_encode(array("status" => "Error", "message" => "Department Name already exists"));
+        echo json_encode(array("status" => "Error", "message" => $dep_already));
         exit;
     } else {
         $sql_Insert = "INSERT INTO CO_WorkList

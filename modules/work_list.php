@@ -252,3 +252,4 @@ require('../sidebar.php');
         </div>
     </div>
 </div>
+<script src="../js/work_list.js"></script>

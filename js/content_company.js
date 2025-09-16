@@ -1,6 +1,48 @@
+toastr.options = {
+    closeButton: true,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: "300",
+    timeOut: "2000",
+};
 $(function () {
     onQueryContent();
 });
+let languages = localStorage.getItem("languages");
+const translations = {
+    en: {
+        add_news: "Add News",
+        edit_news: "Edit News",
+        required_news: "Please enter News Content",
+        alert_choose_row: "Please select a row first!",
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: 'Cancel',
+    },
+    vn: {
+        add_news: "Thêm Tin Tức",
+        edit_news: "Chỉnh sửa Tin Tức",
+        required_news: "Vui lòng nhập nội dung tin tức",
+        alert_choose_row: "Vui lòng! bạn cần phải chọn 1 dòng trong bảng dữ liệu",
+        title: "Bạn có chắc không?",
+        text: "Bạn sẽ không thể hoàn tác điều này!",
+        confirmButtonText: "Có, xóa!",
+        cancelButtonText: 'Hủy bỏ',
+    }
+}
+function getTranslation(lang, key) {
+    if (translations[lang] && translations[lang][key]) {
+        return translations[lang][key];
+    }
+    return translations.en[key];
+}
+function getSelectedRow(table) {
+    return table.rows(".selected").data()[0];
+}
 function onQueryContent() {
     $("#tb_content").DataTable({
         ajax: {
@@ -57,69 +99,6 @@ function onQueryContent() {
         info: false,
     });
 }
-// function addContent(check) {
-//     $("#saveContent").attr("check", check);
-//     if ($("#saveContent").attr("check") == 1) {
-//         $("#modalContent").modal("show");
-//         $("#modal_title").html("Add News");
-
-//         window.editors["PostEditor"].setData('');
-//         window.editors["PostEditorEN"].setData('');
-
-//     }
-//     $("#create-content").validate({
-//         // rules: {
-//         //     ID_Info_Image: { required: true }
-//         // },
-//         // messages: {
-//         //     ID_Info_Image: { required: "Please choose ID Image Information" }
-//         // },
-//         submitHandler: () => {
-//             let formData = new FormData($("#create-content")[0]);
-//             formData.append("Post_Content", window.editors["PostEditor"].getData());
-//             formData.append("Post_ContentEN", window.editors["PostEditorEN"].getData());
-//             if ($("#saveContent").attr("check") == 1) {
-//                 $.ajax({
-//                     url: "../data/data_content_company.php?Action=InsertContent",
-//                     data: formData,
-//                     type: "POST",
-//                     contentType: false,
-//                     processData: false,
-//                     success: (json) => {
-//                         res = JSON.parse(json);
-//                         if (res.status === "Success") {
-//                             toastr.success(res.message, "Info");
-//                             $("#modalContent").modal("hide");
-//                             $("#tb_content").DataTable().ajax.reload();
-//                         } else {
-//                             toastr.error(res.message, "Info");
-//                         }
-//                     }
-//                 });
-//             } else {
-//                 $.ajax({
-//                     url: "../data/data_content_company.php?Action=UpdateContent",
-//                     data: formData,
-//                     type: "POST",
-//                     contentType: false,
-//                     processData: false,
-//                     success: (json) => {
-//                         let res = JSON.parse(json);
-//                         if (res.status === "Success") {
-//                             toastr.success(res.message, "Info");
-//                             $("#modalContent").modal("hide");
-//                             $("#tb_content").DataTable().ajax.reload();
-//                         } else {
-//                             toastr.error(res.message, "Info");
-//                         }
-//                     }
-//                 });
-//             }
-//         },
-//     });
-
-
-// }
 function base64ToFile(base64, filename) {
     let arr = base64.split(',');
     let mime = arr[0].match(/:(.*?);/)[1];
@@ -171,7 +150,7 @@ function addContent(check) {
     $("#saveContent").attr("check", check);
     if ($("#saveContent").attr("check") == 1) {
         $("#modalContent").modal("show");
-        $("#modal_title").html("Add News");
+        $("#modal_title").html(getTranslation(languages, "add_news"));
 
         window.editors["PostEditor"].setData('');
         window.editors["PostEditorEN"].setData('');
@@ -188,7 +167,7 @@ function addContent(check) {
         },
         messages: {
             PostEditor: {
-                required: "Please enter News Content"
+                required: getTranslation(languages, "required_news")
             },
         },
         submitHandler: () => {
@@ -213,11 +192,11 @@ function addContent(check) {
                     success: (json) => {
                         let res = JSON.parse(json);
                         if (res.status === "Success") {
-                            toastr.success(res.message, "Info");
+                            toastr.success(res.message);
                             $("#modalContent").modal("hide");
                             $("#tb_content").DataTable().ajax.reload();
                         } else {
-                            toastr.error(res.message, "Info");
+                            toastr.error(res.message);
                         }
                     }
                 });
@@ -230,14 +209,16 @@ function editContent() {
     let row = getSelectedRow(table);
     if (row) {
         $("#modalContent").modal("show");
-        $("#modal_title").html("Edit News");
+        $("#modal_title").html(getTranslation(languages, "edit_news"));
+
         $("#IDNews").val(row.ID_News);
+
         window.editors["PostEditor"].setData(row.Post_Content);
         window.editors["PostEditorEN"].setData(row.Post_ContentEN);
         addContent(2);
     }
     else {
-        toastr.warning("Please choose row need Edit", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }
 function removeContent() {
@@ -245,13 +226,14 @@ function removeContent() {
     let row = getSelectedRow(table);
     if (row) {
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: getTranslation(languages, "title"),
+            text: getTranslation(languages, "text"),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: getTranslation(languages, "confirmButtonText"),
+            cancelButtonText: getTranslation(languages, "cancelButtonText")
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -284,6 +266,6 @@ function removeContent() {
             }
         });
     } else {
-        toastr.warning("Please choose row need Delete", "Info");
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }
