@@ -444,3 +444,6 @@ function ShowListApply(Dep_ID) {
         info: false,
     });
 }
+function PDF_ListApp(pdf) {
+    window.open('../data/show_file_pdf.php?Action=List_Applicant&PDF=' + pdf);
+}
