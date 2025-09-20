@@ -7,7 +7,7 @@ require('../sidebar.php');
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">User Management</h5>
+                        <h5 class="card-title"><?= $usermanagement ?></h5>
                         <div class="row">
                             <div class="col-3">
                                 <label class="form-label">Department Name</label>

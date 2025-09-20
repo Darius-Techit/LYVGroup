@@ -24,8 +24,8 @@ if ($Action == "GetDataDep") {
 }
 
 if ($Action == "InsertDep") {
-    $DepName = isset($_POST['DepName']) ? $_POST['DepName'] : "";
-    $DepNameEN = isset($_POST['DepNameEN']) ? $_POST['DepNameEN'] : "";
+    $DepName = str_replace("'", "''", isset($_POST['DepName']) ? $_POST['DepName'] : "");
+    $DepNameEN =  str_replace("'", "''", isset($_POST['DepNameEN']) ? $_POST['DepNameEN'] : "");
     $sql_maxid = "SELECT ISNULL(MAX(RIGHT(Dep_ID,8)),0)+1 Dep_ID FROM CO_DepartmentCompany";
     $rs_maxid = fetch_to_array($sql_maxid);
     $num_id = $rs_maxid[0]['Dep_ID'];
@@ -36,6 +36,7 @@ if ($Action == "InsertDep") {
                 (
                     Dep_ID,
                     Dep_Name,
+                    Dep_NameEN,
                     UserID,
                     UserDate,
                     CreateDate
@@ -44,6 +45,7 @@ if ($Action == "InsertDep") {
                 (
                     '$DepID',
                     N'$DepName',
+                    N'$DepNameEN',
                     '$userid',
                     GETDATE(),
                     GETDATE()

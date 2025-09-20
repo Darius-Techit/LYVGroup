@@ -12,8 +12,8 @@ if ($Action == 'GetDataContent') {
     echo json_encode($dataContent);
 }
 if ($Action == "InsertContent") {
-    $Post_Content = isset($_REQUEST['Post_Content']) ? $_REQUEST['Post_Content'] : "";
-    $Post_ContentEN = isset($_REQUEST['Post_ContentEN']) ? $_REQUEST['Post_ContentEN'] : "";
+    $Post_Content = str_replace("'", "''", isset($_REQUEST['Post_Content']) ? $_REQUEST['Post_Content'] : "");
+    $Post_ContentEN = str_replace("'", "''", isset($_REQUEST['Post_ContentEN']) ? $_REQUEST['Post_ContentEN'] : "");
 
     $sql_maxid = "SELECT ISNULL(MAX(RIGHT(ID_News,8)),0)+1 ID_News FROM CO_ContentCompany";
     $rs_maxid = fetch_to_array($sql_maxid);
@@ -48,8 +48,8 @@ if ($Action == "InsertContent") {
 }
 if ($Action == "UpdateContent") {
     $IDNews = isset($_POST['IDNews']) ? $_POST['IDNews'] : "";
-    $Post_Content = isset($_POST['Post_Content']) ? $_POST['Post_Content'] : "";
-    $Post_ContentEN = isset($_POST['Post_ContentEN']) ? $_POST['Post_ContentEN'] : "";
+    $Post_Content = str_replace("'", "''", isset($_POST['Post_Content']) ? $_POST['Post_Content'] : "");
+    $Post_ContentEN = str_replace("'", "''", isset($_POST['Post_ContentEN']) ? $_POST['Post_ContentEN'] : "");
 
     $sql_old = "SELECT Post_Content, Post_ContentEN 
                 FROM CO_ContentCompany 

@@ -8,6 +8,7 @@ $userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : '';
 $permission = isset($_SESSION['permission']) ? $_SESSION['permission'] : '';
 include_once("languages/languages.php");
 
+
 ?>
 
 <!DOCTYPE html>
@@ -232,7 +233,7 @@ include_once("languages/languages.php");
                     <li>
                         <a class="dropdown-item d-flex align-items-center cursor-pointer" href="../logout.php">
                             <i class="bi bi-box-arrow-right"></i>
-                            <span>Logout</span>
+                            <span><?= $logout ?></span>
                         </a>
                     </li>
                 </ul>

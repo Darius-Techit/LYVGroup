@@ -72,9 +72,6 @@ function onQueryWorkList() {
             }
         },
         columns: [
-            // {
-            //     data: "ID",
-            // },
             {
                 data: "Dep_Name",
             },
@@ -134,6 +131,19 @@ function onQueryWorkList() {
             //     data: "Working_TimeEN",
 
             // }
+            {
+                data: "Date_Applications"
+            },
+            {
+                data: "Position_Level",
+                render: function (data, type, row) {
+                    if (data === "CN") {
+                        return "Công nhân";
+                    } else {
+                        return "Văn phòng";
+                    }
+                }
+            },
             {
                 data: null,
                 render: function (val, type, row) {
@@ -206,6 +216,9 @@ function addWorkList(check) {
         quills["Job_DescriptionEN"]?.clipboard.dangerouslyPasteHTML('' || "");
         quills["Request_Work"]?.clipboard.dangerouslyPasteHTML('' || "");
         quills["Request_WorkEN"]?.clipboard.dangerouslyPasteHTML('' || "");
+        quills["Compensation_Benefits"]?.clipboard.dangerouslyPasteHTML('' || "");
+        quills["Compensation_BenefitsEN"]?.clipboard.dangerouslyPasteHTML('' || "");
+
         $("#DepID").val('');
         $("#Number_Vacancies").val('');
         $("#Degree").val('');
@@ -220,6 +233,8 @@ function addWorkList(check) {
         $("#Work_ExperienceEN").val('');
         $("#Working_Time").val('');
         $("#Working_TimeEN").val('');
+        $("#Application_Deadline").val('');
+        // $("#Position_Level").val('');
         $("#Job_Hot").prop("checked", false);
 
         $("#DepID-error").hide();
@@ -230,6 +245,7 @@ function addWorkList(check) {
         $("#Salary-error").hide();
         $("#Work_Experience-error").hide();
         $("#Working_Time-error").hide();
+        $("#Application_Deadline-error").hide();
     }
 
     $("#create-worklist").validate({
@@ -241,7 +257,8 @@ function addWorkList(check) {
             Age_Range: { required: true },
             Salary: { required: true },
             Work_Experience: { required: true },
-            Working_Time: { required: true }
+            Working_Time: { required: true },
+            Application_Deadline: { required: true }
         },
         messages: {
             DepID: { required: getTranslation(languages, "required_DepID") },
@@ -251,7 +268,8 @@ function addWorkList(check) {
             Age_Range: { required: getTranslation(languages, "required_age_range") },
             Salary: { required: getTranslation(languages, "required_salary") },
             Work_Experience: { required: getTranslation(languages, "required_work_experience") },
-            Working_Time: { required: getTranslation(languages, "required_working_time") }
+            Working_Time: { required: getTranslation(languages, "required_working_time") },
+            Application_Deadline: { required: "Vui lòng chọn thời gian nộp hồ sơ" }
 
         },
         submitHandler: () => {
@@ -259,6 +277,8 @@ function addWorkList(check) {
             $("#Job_DescriptionEN_input").val(quills['Job_DescriptionEN']?.root.innerHTML || "");
             $("#Request_Work_input").val(quills['Request_Work']?.root.innerHTML || "");
             $("#Request_WorkEN_input").val(quills['Request_WorkEN']?.root.innerHTML || "");
+            $("#Compensation_Benefits_input").val(quills['Compensation_Benefits']?.root.innerHTML || "");
+            $("#Compensation_BenefitsEN_input").val(quills['Compensation_BenefitsEN']?.root.innerHTML || "");
 
             let action = ($("#saveWorkList").attr("check") == 1) ? "InsertWL" : "UpdateWL";
             $.ajax({
@@ -287,10 +307,9 @@ function editWorkList() {
     let row = getSelectedRow(table);
     makeSelectReadonly("#DepID");
 
-
     if (row) {
         $("#modalWorkList").modal("show");
-        $("#modal_title").html(getTranslation(languages, "edit_Work_list"));
+        $("#modal_title").html(getTranslation(languages, "edit_work_list"));
 
         //Fill data from table to modal
         quills["Job_Description"].setContents([]);
@@ -299,6 +318,8 @@ function editWorkList() {
         quills["Job_DescriptionEN"]?.clipboard.dangerouslyPasteHTML(row.Job_DescriptionEN || "");
         quills["Request_Work"]?.clipboard.dangerouslyPasteHTML(row.Request_Work || "");
         quills["Request_WorkEN"]?.clipboard.dangerouslyPasteHTML(row.Request_WorkEN || "");
+        quills["Compensation_Benefits"]?.clipboard.dangerouslyPasteHTML(row.Compensation_Benefits || "");
+        quills["Compensation_BenefitsEN"]?.clipboard.dangerouslyPasteHTML(row.Compensation_BenefitsEN || "");
         $("#ID").val(row.ID);
         $("#DepID").val(row.Dep_ID);
         $("#Number_Vacancies").val(row.Number_Vacancies);
@@ -314,6 +335,8 @@ function editWorkList() {
         $("#Work_ExperienceEN").val(row.Work_ExperienceEN);
         $("#Working_Time").val(row.Working_Time);
         $("#Working_TimeEN").val(row.Working_TimeEN);
+        $("#Application_Deadline").val(row.Date_Applications);
+        $("#Position_Level").val(row.Position_Level);
         $("#Job_Hot").prop("checked", row.Job_Hot == 1);
 
         $("#DepID-error").hide();
@@ -324,6 +347,7 @@ function editWorkList() {
         $("#Salary-error").hide();
         $("#Work_Experience-error").hide();
         $("#Working_Time-error").hide();
+        $("#Application_Deadline-error").hide();
         addWorkList(2);
     } else {
         toastr.warning(getTranslation(languages, "alert_choose_row"));
@@ -332,7 +356,6 @@ function editWorkList() {
 function removeWorkList() {
     let table = $("#tb_work_list").DataTable();
     let row = getSelectedRow(table);
-    console.log(row);
     if (row) {
         Swal.fire({
             title: getTranslation(languages, "title"),
@@ -380,7 +403,6 @@ function removeWorkList() {
     }
 }
 function ShowListApply(Dep_ID) {
-    console.log(Dep_ID);
     $("#modalListApply").modal("show");
     $("#modal_title_ListApply").html("List Apply");
 
@@ -405,7 +427,14 @@ function ShowListApply(Dep_ID) {
 
             },
             {
-                data: "File_name",
+                // data: "File_name",
+                data: function (row) {
+                    if (row.File_name == null) {
+                        return ''
+                    } else {
+                        return `<a style="cursor: pointer;color: #007bff; " attr="" onclick="PDF_ListApp('${row.File_name}')" >${row.File_name}</a>`;
+                    }
+                }
             },
         ],
         destroy: true,

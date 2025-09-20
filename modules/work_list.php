@@ -9,7 +9,7 @@ require('../sidebar.php');
                     <div class="card-body">
                         <h5 class="card-title"><?= $worklist ?></h5>
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-3">
                                 <label class="form-label"><?= $department_name ?></label>
                                 <select class="form-select" aria-label="Default select example" id="sr_DepName">
                                     <option selected=""></option>
@@ -24,7 +24,7 @@ require('../sidebar.php');
                             </div>
                             <div class="col-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
-                                <button type="submit" class="btn btn-primary" onclick="onQueryWorkList()">
+                                <button type="submit" class="btn btn-primary form-control" onclick="onQueryWorkList()">
                                     <i class="bi bi-search"></i> <?= $search ?></button>
                             </div>
                         </div>
@@ -67,6 +67,8 @@ require('../sidebar.php');
                                         <!-- <th style="background-color: #337ab7; color: #fff; text-align: center;">Work Experience English</th> -->
                                         <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $working_time ?></th>
                                         <!-- <th style="background-color: #337ab7; color: #fff; text-align: center;">Working Time English</th> -->
+                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $application_deadline ?></th>
+                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $position_level ?></th>
                                         <th style="background-color: #337ab7; color: #fff; text-align: center;"></th>
                                     </tr>
                                 </thead>
@@ -159,16 +161,29 @@ require('../sidebar.php');
                             <label class="form-label"><?= $working_timeEN ?> <span class="badge bg-primary badge-number">8B</span></label>
                             <input type="text" class="form-control" name="Working_TimeEN" id="Working_TimeEN">
                         </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><?= $application_deadline ?> <span class="badge bg-primary badge-number">9</span></label>
+                            <input type="date" class="form-control" name="Application_Deadline" id="Application_Deadline">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><?= $position_level ?> <span class="badge bg-primary badge-number">10</span></label>
+                            <select class="form-select" name="Position_Level" id="Position_Level">
+                                <!-- <option selected="">&nbsp;</option> -->
+                                <option value="CN" selected>Công nhân</option>
+                                <option value="VP">Văn phòng</option>
+                            </select>
+                        </div>
                         <div class="col-md-3" style="align-self: anchor-center;">
                             <label class="form-label">&nbsp;</label>
                             <input class="form-check-input" type="checkbox" id="Job_Hot" name="Job_Hot" value="1">
-                            <label class="form-check-label" for="Job_Hot" style="color: red;"> Job Hot
+                            <label class="form-check-label" for="Job_Hot" style="color: red;"> <?= $job_hot ?>
                             </label>
                         </div>
                     </div>
+                    <hr style="border: none; border-top: 2px dashed rgba(0, 0, 0, 0.3); margin: 10px 0px 10px 0px;  " />
                     <div class="row mb-3 g-3">
                         <div class="col-6">
-                            <label class="form-label">Job Description</label>
+                            <label class="form-label"><?= $job_description ?> <span class="badge bg-primary badge-number">11</span></label>
                             <div>
                                 <div class="quill-editor-default" id="Job_Description">
                                 </div>
@@ -176,7 +191,7 @@ require('../sidebar.php');
                             </div>
                         </div>
                         <div class="col-6 ">
-                            <label class="form-label">Job Description English</label>
+                            <label class="form-label"><?= $job_descriptionEN ?></label>
                             <div>
                                 <div class="quill-editor-default" id="Job_DescriptionEN">
                                 </div>
@@ -184,7 +199,7 @@ require('../sidebar.php');
                             </div>
                         </div>
                         <div class="col-6">
-                            <label class="form-label">Request Work</label>
+                            <label class="form-label"><?= $request_work ?> <span class="badge bg-primary badge-number">12</span></label>
                             <div>
                                 <div class="quill-editor-default" id="Request_Work">
                                 </div>
@@ -192,29 +207,29 @@ require('../sidebar.php');
                             </div>
                         </div>
                         <div class="col-6 ">
-                            <label class="form-label">Request Work English</label>
+                            <label class="form-label"><?= $request_workEN ?></label>
                             <div>
                                 <div class="quill-editor-default" id="Request_WorkEN">
                                 </div>
                                 <textarea name="Request_WorkEN_input" id="Request_WorkEN_input" hidden></textarea>
                             </div>
                         </div>
-                        <!-- <div class="col-6">
-                            <label class="form-label">Request Work</label>
+                        <div class="col-6">
+                            <label class="form-label"><?= $compensation_benefits ?> <span class="badge bg-primary badge-number">13</span></label>
                             <div>
-                                <div class="quill-editor-default" id="Request_Work">
+                                <div class="quill-editor-default" id="Compensation_Benefits">
                                 </div>
-                                <textarea name="Request_Work_input" id="Request_Work_input" hidden></textarea>
+                                <textarea name="Compensation_Benefits_input" id="Compensation_Benefits_input" hidden></textarea>
                             </div>
                         </div>
                         <div class="col-6 ">
-                            <label class="form-label">Request Work English</label>
+                            <label class="form-label"><?= $compensation_benefitsEN ?></label>
                             <div>
-                                <div class="quill-editor-default" id="Request_WorkEN">
+                                <div class="quill-editor-default" id="Compensation_BenefitsEN">
                                 </div>
-                                <textarea name="Request_WorkEN_input" id="Request_WorkEN_input" hidden></textarea>
+                                <textarea name="Compensation_BenefitsEN_input" id="Compensation_BenefitsEN_input" hidden></textarea>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

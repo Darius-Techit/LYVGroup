@@ -65,17 +65,12 @@ require('../sidebar.php');
                         <input type="hidden" class="form-control" name="IDNews" id="IDNews">
                         <div class="col-md-6">
                             <label class="form-label"><?= $news_content ?></label>
-                            <!-- <div id="PostEditor" name="PostEditor">
 
-
-                            </div> -->
                             <textarea class="form-control" id="PostEditor" name="PostEditor"></textarea>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><?= $news_contentEN ?></label>
-                            <!-- <div id="PostEditorEN" name="PostEditorEN">
 
-                            </div> -->
                             <textarea class="form-control" id="PostEditorEN" name="PostEditorEN"></textarea>
                         </div>
                     </div>
@@ -174,9 +169,29 @@ require('../sidebar.php');
                 'tableProperties',
                 'tableCellProperties'
             ]
+        },
+        htmlSupport: {
+            allow: [{
+                name: /.*/, // cho phép mọi tag
+                attributes: true, // giữ mọi attribute
+                classes: true, // giữ mọi class
+                styles: true // giữ mọi style
+            }]
         }
     };
 
+    // const editorID = ["#PostEditor", "#PostEditorEN"];
+    // editorID.forEach(id => {
+    //     const el = document.querySelector(id);
+    //     if (el) {
+    //         ClassicEditor
+    //             .create(el, editorConfig)
+    //             .then(editor => {
+    //                 window.editors[id.replace('#', '')] = editor;
+    //             })
+    //             .catch(error => console.error(error));
+    //     }
+    // });
     const editorID = ["#PostEditor", "#PostEditorEN"];
     editorID.forEach(id => {
         const el = document.querySelector(id);
@@ -184,6 +199,10 @@ require('../sidebar.php');
             ClassicEditor
                 .create(el, editorConfig)
                 .then(editor => {
+                    editor.getData = function() {
+                        return editor.editing.view.getDomRoot().innerHTML;
+                    };
+
                     window.editors[id.replace('#', '')] = editor;
                 })
                 .catch(error => console.error(error));

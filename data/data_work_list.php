@@ -14,7 +14,8 @@ if ($Action == "GetDataWorkList") {
     $sqlDataWL = "  SELECT  wl.ID, dc.Dep_ID , dc.Dep_Name, wl.Job_Description,wl.Job_DescriptionEN, wl.Request_Work,wl.Request_WorkEN,
                             wl.Degree,wl.DegreeEN, wl.Gender,wl.GenderEN, wl.Age_Range,wl.Age_RangeEN, wl.Salary,wl.SalaryEN,
                             wl.Number_Vacancies, wl.Work_Experience,wl.Work_ExperienceEN, wl.Working_Time,wl.Working_TimeEN,
-                            wl.Job_Hot, wl.UserDate, wl.CreateDate,wl.Date_Applications, wl.Position_Level,
+                            wl.Job_Hot, wl.UserDate, wl.CreateDate,CONVERT(VARCHAR(20),wl.Date_Applications,23)Date_Applications, wl.Position_Level,
+                            wl.Compensation_Benefits, wl.Compensation_BenefitsEN,
                             (SELECT COUNT(Dep_ID) FROM CO_ListApplicant WHERE Dep_ID=wl.Dep_ID) IDListApply
                     FROM CO_WorkList wl
                     LEFT JOIN CO_DepartmentCompany AS dc ON dc.Dep_ID=wl.Dep_ID
@@ -33,14 +34,18 @@ if ($Action == "InsertWL") {
     $Age_RangeEN = isset($_POST['Age_RangeEN']) ? $_POST['Age_RangeEN'] : "";
     $Salary = isset($_POST['Salary']) ? $_POST['Salary'] : "";
     $SalaryEN = isset($_POST['SalaryEN']) ? $_POST['SalaryEN'] : "";
+    $Date_Applications = isset($_POST['Application_Deadline']) ? $_POST['Application_Deadline'] : "";
+    $Position_Level = isset($_POST['Position_Level']) ? $_POST['Position_Level'] : "";
     $Work_Experience = isset($_POST['Work_Experience']) ? $_POST['Work_Experience'] : "";
     $Work_ExperienceEN = isset($_POST['Work_ExperienceEN']) ? $_POST['Work_ExperienceEN'] : "";
     $Working_Time = isset($_POST['Working_Time']) ? $_POST['Working_Time'] : "";
     $Working_TimeEN = isset($_POST['Working_TimeEN']) ? $_POST['Working_TimeEN'] : "";
-    $Job_Description = isset($_POST['Job_Description_input']) ? $_POST['Job_Description_input'] : "";
-    $Job_DescriptionEN = isset($_POST['Job_DescriptionEN_input']) ? $_POST['Job_DescriptionEN_input'] : "";
-    $Request_Work = isset($_POST['Request_Work_input']) ? $_POST['Request_Work_input'] : "";
-    $Request_WorkEN = isset($_POST['Request_WorkEN_input']) ? $_POST['Request_WorkEN_input'] : "";
+    $Job_Description = str_replace("'", "''", isset($_POST['Job_Description_input']) ? $_POST['Job_Description_input'] : "");
+    $Job_DescriptionEN = str_replace("'", "''", isset($_POST['Job_DescriptionEN_input']) ? $_POST['Job_DescriptionEN_input'] : "");
+    $Request_Work = str_replace("'", "''", isset($_POST['Request_Work_input']) ? $_POST['Request_Work_input'] : "");
+    $Request_WorkEN = str_replace("'", "''", isset($_POST['Request_WorkEN_input']) ? $_POST['Request_WorkEN_input'] : "");
+    $Compensation_Benefits = str_replace("'", "''", isset($_POST['Compensation_Benefits_input']) ? $_POST['Compensation_Benefits_input'] : "");
+    $Compensation_BenefitsEN = str_replace("'", "''", isset($_POST['Compensation_BenefitsEN_input']) ? $_POST['Compensation_BenefitsEN_input'] : "");
     $Job_Hot = isset($_POST['Job_Hot']) ? 1 : 0;
 
     $sql_exists = "SELECT 1 FROM CO_WorkList WHERE Dep_ID='$Dep_ID'";
@@ -66,11 +71,15 @@ if ($Action == "InsertWL") {
                     Salary,
                     SalaryEN,
                     Number_Vacancies,
+                    Date_Applications,
+                    Position_Level,
                     Work_Experience,
                     Work_ExperienceEN,
                     Working_Time,
                     Working_TimeEN,
                     Job_Hot,
+                    Compensation_Benefits,
+                    Compensation_BenefitsEN,
                     UserID,
                     UserDate,
                     CreateDate
@@ -91,11 +100,15 @@ if ($Action == "InsertWL") {
                     N'$Salary',
                     N'$SalaryEN',
                     N'$Number_Vacancies',
+                    '$Date_Applications',
+                    '$Position_Level',
                     N'$Work_Experience',
                     N'$Work_ExperienceEN',
                     N'$Working_Time',
                     N'$Working_TimeEN',
                     '$Job_Hot',
+                    N'$Compensation_Benefits',
+                    N'$Compensation_BenefitsEN',
                     '$userid',
                     GETDATE(),
                     GETDATE()
@@ -120,14 +133,18 @@ if ($Action == "UpdateWL") {
     $Age_RangeEN = isset($_POST['Age_RangeEN']) ? $_POST['Age_RangeEN'] : "";
     $Salary = isset($_POST['Salary']) ? $_POST['Salary'] : "";
     $SalaryEN = isset($_POST['SalaryEN']) ? $_POST['SalaryEN'] : "";
+    $Date_Applications = isset($_POST['Application_Deadline']) ? $_POST['Application_Deadline'] : "";
+    $Position_Level = isset($_POST['Position_Level']) ? $_POST['Position_Level'] : "";
     $Work_Experience = isset($_POST['Work_Experience']) ? $_POST['Work_Experience'] : "";
     $Work_ExperienceEN = isset($_POST['Work_ExperienceEN']) ? $_POST['Work_ExperienceEN'] : "";
     $Working_Time = isset($_POST['Working_Time']) ? $_POST['Working_Time'] : "";
     $Working_TimeEN = isset($_POST['Working_TimeEN']) ? $_POST['Working_TimeEN'] : "";
-    $Job_Description = isset($_POST['Job_Description_input']) ? $_POST['Job_Description_input'] : "";
-    $Job_DescriptionEN = isset($_POST['Job_DescriptionEN_input']) ? $_POST['Job_DescriptionEN_input'] : "";
-    $Request_Work = isset($_POST['Request_Work_input']) ? $_POST['Request_Work_input'] : "";
-    $Request_WorkEN = isset($_POST['Request_WorkEN_input']) ? $_POST['Request_WorkEN_input'] : "";
+    $Job_Description = str_replace("'", "''", isset($_POST['Job_Description_input']) ? $_POST['Job_Description_input'] : "");
+    $Job_DescriptionEN = str_replace("'", "''", isset($_POST['Job_DescriptionEN_input']) ? $_POST['Job_DescriptionEN_input'] : "");
+    $Request_Work = str_replace("'", "''", isset($_POST['Request_Work_input']) ? $_POST['Request_Work_input'] : "");
+    $Request_WorkEN = str_replace("'", "''", isset($_POST['Request_WorkEN_input']) ? $_POST['Request_WorkEN_input'] : "");
+    $Compensation_Benefits = str_replace("'", "''", isset($_POST['Compensation_Benefits_input']) ? $_POST['Compensation_Benefits_input'] : "");
+    $Compensation_BenefitsEN = str_replace("'", "''", isset($_POST['Compensation_BenefitsEN_input']) ? $_POST['Compensation_BenefitsEN_input'] : "");
     $Job_Hot = isset($_POST['Job_Hot']) ? 1 : 0;
 
     $sql_Update = "UPDATE CO_WorkList SET
@@ -143,11 +160,15 @@ if ($Action == "UpdateWL") {
                 Age_RangeEN = N'$Age_RangeEN',
                 Salary = N'$Salary',
                 SalaryEN = N'$SalaryEN',
+                Date_Applications = '$Date_Applications',
+                Position_Level ='$Position_Level',
                 Number_Vacancies = N'$Number_Vacancies',
                 Work_Experience = N'$Work_Experience',
                 Work_ExperienceEN = N'$Work_ExperienceEN',
                 Working_Time = N'$Working_Time',
                 Working_TimeEN = N'$Working_TimeEN',
+                Compensation_Benefits = N'$Compensation_Benefits',
+                Compensation_BenefitsEN = N'$Compensation_BenefitsEN',
                 UserID = '$userid',
                 UserDate = GETDATE(),
                 Job_Hot = '$Job_Hot'

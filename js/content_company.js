@@ -171,6 +171,7 @@ function addContent(check) {
             },
         },
         submitHandler: () => {
+            console.log(window.editors["PostEditor"].getData());
             Promise.all([
                 processEditorImages(window.editors["PostEditor"].getData()),
                 processEditorImages(window.editors["PostEditorEN"].getData())
