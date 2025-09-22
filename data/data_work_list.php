@@ -7,16 +7,31 @@ $Action = $_REQUEST['Action'];
 
 if ($Action == "GetDataWorkList") {
     $DepName = isset($_GET['DepName']) ? $_GET['DepName'] : "";
+    $dateFrom = isset($_GET['User_Date_From']) ? $_GET['User_Date_From'] : "";
+    $dateTo = isset($_GET['User_Date_To']) ? $_GET['User_Date_To'] : "";
+    $position_level = isset($_GET['Position_Level']) ? $_GET['Position_Level'] : "";
     $where = "1=1";
     if ($DepName != '') {
         $where .= " AND dc.Dep_Name LIKE N'%$DepName%'";
+    }
+    if ($dateTo != '' && $dateFrom == '') {
+        $where .= " AND CONVERT(VARCHAR(20),wl.UserDate,23) = '$dateTo' ";
+    }
+    if ($dateFrom != '' && $dateTo == '') {
+        $where .= " AND CONVERT(VARCHAR(20),wl.UserDate,23) = '$dateFrom' ";
+    }
+    if ($dateTo != '' && $dateFrom != '') {
+        $where .= " AND CONVERT(VARCHAR(20),wl.UserDate,23) BETWEEN '$dateFrom' AND '$dateTo' ";
+    }
+    if ($position_level != '') {
+        $where .= "AND wl.Position_Level  ='$position_level'";
     }
     $sqlDataWL = "  SELECT  wl.ID, dc.Dep_ID , dc.Dep_Name, wl.Job_Description,wl.Job_DescriptionEN, wl.Request_Work,wl.Request_WorkEN,
                             wl.Degree,wl.DegreeEN, wl.Gender,wl.GenderEN, wl.Age_Range,wl.Age_RangeEN, wl.Salary,wl.SalaryEN,
                             wl.Number_Vacancies, wl.Work_Experience,wl.Work_ExperienceEN, wl.Working_Time,wl.Working_TimeEN,
                             wl.Job_Hot, wl.UserDate, wl.CreateDate,CONVERT(VARCHAR(20),wl.Date_Applications,23)Date_Applications, wl.Position_Level,
                             wl.Compensation_Benefits, wl.Compensation_BenefitsEN,
-                            (SELECT COUNT(Dep_ID) FROM CO_ListApplicant WHERE Dep_ID=wl.Dep_ID) IDListApply
+                            (SELECT COUNT(Dep_ID) FROM CO_ListApplicant WHERE Dep_ID=wl.Dep_ID AND ISNULL(Processing_Status,'')='') IDListApply
                     FROM CO_WorkList wl
                     LEFT JOIN CO_DepartmentCompany AS dc ON dc.Dep_ID=wl.Dep_ID
                     WHERE $where";

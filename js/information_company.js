@@ -123,52 +123,16 @@ function getSelectedRow(table) {
     return table.rows(".selected").data()[0];
 }
 function onQueryInfo() {
-    // let childTable = $("#tb_info_pic").DataTable({
-    //     ajax: {
-    //         type: "GET",
-    //         // url: "../data/data_information_company.php?Action=GetDataInfoPic",
-    //         // data: function (d) {
-    //         //     d.ID_Info_Image = window.ID_Info_Image || '';  // gửi lên server
-    //         // },
-    //         dataSrc: function (res) {
-    //             return res;
-    //         }
-
-    //     },
-    //     columns: [
-    //         {
-    //             data: "ID_Image",
-    //         },
-    //         {
-    //             data: "Images",
-    //             render: function (val, type, row) {
-    //                 if (!val) return "";
-
-    //                 const images = val.split("[]");
-    //                 let html = "<div style='display:flex; gap:4px; flex-wrap:wrap;'>";
-
-    //                 images.forEach(src => {
-    //                     if (src) {
-    //                         html += `<img src="${src}" 
-    //                  style="max-width:140px; max-height:100px; height:auto; width:auto; border-radius:4px;" />`;
-    //                     }
-    //                 });
-    //                 html += "</div>";
-    //                 return html;
-    //             }
-    //         }
-    //     ],
-    //     destroy: true,
-    //     searching: false,
-    //     ordering: true,
-    //     info: false,
-    // });
-    // let parentTable = 
+    let User_Date_From = $("#User_Date_From").val();
+    let User_Date_To = $("#User_Date_To").val();
     $("#tb_info_company").DataTable({
         ajax: {
             type: "GET",
             url: "../data/data_information_company.php?Action=GetDataInfo",
-            // data: "data",
+            data: {
+                User_Date_From: User_Date_From,
+                User_Date_To: User_Date_To
+            },
             dataSrc: function (res) {
                 return res;
             }
@@ -206,13 +170,6 @@ function onQueryInfo() {
         ordering: true,
         info: false,
     });
-    // parentTable.on('select', function (e, dt, type, indexes) {
-    //     if (type === 'row') {
-    //         let rows = parentTable.row(indexes).data();
-    //         window.ID_Info_Image = rows.ID_Info_Image;
-    //         childTable.ajax.reload();
-    //     }
-    // });
 }
 function addInfo(check) {
     $("#saveInfo").attr("check", check);

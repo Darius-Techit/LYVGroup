@@ -17,7 +17,7 @@ const translations = {
     en: {
         add_work_list: "Add Work",
         edit_work_list: "Edit Work",
-        required_DepID: "Please choose Department Name",
+        required_DepID: "Please Choose Department Name",
         required_number_vacancies: "Please Enter Number Vacancies",
         required_degree: "Please Enter Degree",
         required_gender: "Please Enter Gender",
@@ -25,6 +25,9 @@ const translations = {
         required_salary: "Please Enter Salary",
         required_work_experience: "Please Enter Work Experience",
         required_working_time: "Please Enter Working Time",
+        list_applicant: "List Applicant",
+        edit_status: "Edit Status",
+        required_progress_status: "Please Choose progress status",
         alert_choose_row: "Please select a row first!",
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -42,6 +45,9 @@ const translations = {
         required_salary: "Vui lòng nhập Mức lương",
         required_work_experience: "Vui lòng nhập Kinh nghiệm làm việc",
         required_working_time: "Vui lòng nhập Thời gian làm việc",
+        list_applicant: "Danh sách người nộp đơn",
+        edit_status: "Chỉnh sửa trạng thái",
+        required_progress_status: "Vui lòng chọn trạng thái xử lý",
         alert_choose_row: "Vui lòng! bạn cần phải chọn 1 dòng trong bảng dữ liệu",
         title: "Bạn có chắc không?",
         text: "Bạn sẽ không thể hoàn tác điều này!",
@@ -60,12 +66,18 @@ function getSelectedRow(table) {
 }
 function onQueryWorkList() {
     let DepName = $("#sr_DepName").val();
+    let User_Date_From = $("#User_Date_From").val();
+    let User_Date_To = $("#User_Date_To").val();
+    let Position_Level = $("#Position_Level").val();
     $("#tb_work_list").DataTable({
         ajax: {
             type: "GET",
             url: "../data/data_work_list.php?Action=GetDataWorkList",
             data: {
-                DepName: DepName
+                DepName: DepName,
+                User_Date_From: User_Date_From,
+                User_Date_To: User_Date_To,
+                Position_Level: Position_Level
             },
             dataSrc: function (res) {
                 return res;
@@ -149,13 +161,13 @@ function onQueryWorkList() {
                 render: function (val, type, row) {
                     if (row.IDListApply == '0') {
                         let html = `
-                                <button class="btn btn-light p-0 border-0" onclick="ShowListApply('${row.Dep_ID}')" title="View Apply List">
+                                <button class="btn btn-light p-0 border-0" onclick="ShowListApply('${row.Dep_ID}','${1}')" title="View Apply List">
                                 <i class="bi bi-three-dots-vertical"></i></button>   `;
                         return html;
                     } else {
                         let html = `
                             <div style="position: relative; display: inline-block;">
-                                <button class="btn btn-light p-0 border-0" onclick="ShowListApply('${row.Dep_ID}')" title="View Apply List">
+                                <button class="btn btn-light p-0 border-0" onclick="ShowListApply('${row.Dep_ID}','${1}')" title="View Apply List">
                                 <i class="bi bi-three-dots-vertical"></i>
                                 </button>
                                 <span class="badge bg-danger" style="position: absolute;top: -5px;right: -10px;font-size: 0.65rem;padding: 2px 5px;line-height: 1;">
@@ -402,15 +414,37 @@ function removeWorkList() {
         toastr.warning(getTranslation(languages, "alert_choose_row"));
     }
 }
-function ShowListApply(Dep_ID) {
+$('#modalListApply').on('hidden.bs.modal', function () {
+    var table = $('#tb_work_list').DataTable();
+    table.rows().deselect(); // clear hết selection
+});
+function ShowListApply(Dep_ID, check) {
+    let table = $("#tb_work_list").DataTable();
+    let row = getSelectedRow(table);
+
+    if (check == 1) {
+        $("#SProcessing_Status").val('');
+        $("#Upload_Date_From").val('');
+        $("#Upload_Date_To").val('');
+    }
+
     $("#modalListApply").modal("show");
-    $("#modal_title_ListApply").html("List Apply");
+    $("#modal_title_ListApply").html(getTranslation(languages, "list_applicant"));
+
+    let SProcessing_Status = $("#SProcessing_Status").val();
+    let Upload_Date_From = $("#Upload_Date_From").val();
+    let Upload_Date_To = $("#Upload_Date_To").val();
 
     $("#tb_list_applicant").DataTable({
         ajax: {
             type: "GET",
             url: "../data/data_list_applicant.php?Action=GetDataListApp",
-            data: { Dep_ID: Dep_ID },
+            data: {
+                Dep_ID: Dep_ID ? Dep_ID : row.Dep_ID,
+                SProcessing_Status: SProcessing_Status,
+                Upload_Date_From: Upload_Date_From,
+                Upload_Date_To: Upload_Date_To
+            },
             dataSrc: function (res) {
                 return res;
             }
@@ -423,8 +457,21 @@ function ShowListApply(Dep_ID) {
                 data: "PhoneNumber",
             },
             {
+                data: 'Birthday',
+            },
+            {
                 data: "Email",
 
+            },
+            {
+                // data: "Processing_Status",
+                data: function (row) {
+                    if (row.Processing_Status == null) {
+                        return ''
+                    } else {
+                        return `<span class="badge bg-info text-dark">${row.Processing_Status}</span>`;
+                    }
+                }
             },
             {
                 // data: "File_name",
@@ -438,7 +485,7 @@ function ShowListApply(Dep_ID) {
             },
         ],
         destroy: true,
-        select: false,
+        select: true,
         searching: false,
         ordering: true,
         info: false,
@@ -446,4 +493,99 @@ function ShowListApply(Dep_ID) {
 }
 function PDF_ListApp(pdf) {
     window.open('../data/show_file_pdf.php?Action=List_Applicant&PDF=' + pdf);
+}
+function editListA() {
+    let table = $("#tb_list_applicant").DataTable();
+    let row = getSelectedRow(table);
+    if (row) {
+        $("#modalPro_Status").modal("show");
+        $("#modal-title-status").html(getTranslation(languages, "edit_status"));
+
+        $("#ID_Status").val(row.ID);
+        $("#ID_Dep").val(row.Dep_ID);
+        $("#Processing_Status").val(row.Processing_Status);
+
+        $("#Processing_Status-error").hide();
+
+        $("#create-processstatus").validate({
+            rules: {
+                Processing_Status: { required: true }
+            },
+            messages: {
+                Processing_Status: { required: getTranslation(languages, "required_progress_status") }
+            },
+            submitHandler: () => {
+                $.ajax({
+                    url: "../data/data_list_applicant.php?Action=UpdateStatus",
+                    data: new FormData($("#create-processstatus")[0]),
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    success: (json) => {
+                        res = JSON.parse(json);
+                        if (res.status == "Success") {
+                            toastr.success(res.message);
+                            $("#modalPro_Status").modal("hide");
+                            // $("#modalListApply").modal("hide");
+                            $("#tb_list_applicant").DataTable().ajax.reload();
+                            $("#tb_work_list").DataTable().ajax.reload();
+                        } else {
+                            toastr.error(res.message);
+                        }
+                    }
+                });
+            }
+        })
+    } else {
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
+    }
+}
+function removeListA() {
+    let table = $("#tb_list_applicant").DataTable();
+    let row = getSelectedRow(table);
+    if (row) {
+        Swal.fire({
+            title: getTranslation(languages, "title"),
+            text: getTranslation(languages, "text"),
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: getTranslation(languages, "confirmButtonText"),
+            cancelButtonText: getTranslation(languages, "cancelButtonText")
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "../data/data_list_applicant.php?Action=DeleteStatus",
+                    type: "POST",
+                    data: {
+                        ID_Status: row.ID,
+                        ID_Dep: row.Dep_ID,
+                    },
+                    success: (json) => {
+                        let res = JSON.parse(json);
+                        if (res.status === "Success") {
+                            Swal.fire({
+                                icon: "success",
+                                title: res.message,
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                            $("#tb_list_applicant").DataTable().ajax.reload();
+                        } else {
+                            Swal.fire({
+                                title: res.message,
+                                icon: "error",
+                                confirmButtonText: 'OK',
+                                timer: 1000
+                            });
+                        }
+                    }
+                });
+
+            }
+        });
+    } else {
+        toastr.warning(getTranslation(languages, "alert_choose_row"));
+    }
 }

@@ -31,14 +31,29 @@ h6 {
   font-family: "Nunito", sans-serif;
 }
 
-#tb_content .sorting_1 {
+#tb_content .truncate {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0;
-  color: black;
+  width: 250px;
+}
+.truncate h2,
+.truncate h3,
+.truncate strong,
+.truncate p{
+  font-size: 16px;
+}
+
+.dataTables_scrollHead thead tr th{
+  background-color: #337ab7; 
+  color: #fff;
+  text-align: center;
+  vertical-align: middle;
+}
+.swal2-title {
+  font-size: 24px !important;
 }
 
 /*--------------------------------------------------------------

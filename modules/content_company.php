@@ -10,9 +10,19 @@ require('../sidebar.php');
                     <div class="card-body">
                         <h5 class="card-title"><?= $news ?></h5>
                         <div class="row">
-                            <div class="col-md-2">
-                                <label for="inputNanme4" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="inputNanme4">
+                            <div class="col-4">
+                                <label class="form-label"><?= $user_date ?></label>
+                                <div class="d-flex align-items-center">
+                                    <div class="input-group w-40">
+                                        <span class="input-group-text"><?= $from ?></span>
+                                        <input type="date" class="form-control" name="User_Date_From" id="User_Date_From">
+                                    </div>
+                                    <span class="mx-2">~</span>
+                                    <div class="input-group w-40">
+                                        <span class="input-group-text"><?= $to ?></span>
+                                        <input type="date" class="form-control" name="User_Date_To" id="User_Date_To">
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
@@ -40,8 +50,14 @@ require('../sidebar.php');
                             <table id="tb_content" class="table table-striped table-bordered zero-configuration" style="width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $news_content ?></th>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $news_contentEN ?></th>
+                                        <th><?= $image_content ?></th>
+                                        <th><?= $title_content ?></th>
+                                        <th><?= $description_content ?></th>
+                                        <th><?= $news_content ?></th>
+
+                                        <th><?= $title_content_en ?></th>
+                                        <th><?= $description_content_en ?></th>
+                                        <th><?= $news_contentEN ?></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -52,6 +68,7 @@ require('../sidebar.php');
         </div>
     </section>
 </main>
+
 <div class="modal fade show" id="modalContent" tabindex="-1" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen modal-dialog-scrollable">
         <div class="modal-content">
@@ -61,8 +78,57 @@ require('../sidebar.php');
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" class="form-control" name="IDNews" id="IDNews">
                     <div class="row g-3">
-                        <input type="hidden" class="form-control" name="IDNews" id="IDNews">
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center flex-column">
+                                <label class='form-label-modal form-label'><?= $image_content ?></label>
+                                <div class='col-12 col-sm-6 col-md-4 col-lg-4 position-relative'
+                                    style='width: 50%;'>
+                                    <label for='image-content'
+                                        class='border d-flex justify-content-center align-items-center'
+                                        style='width: 100%; height: 300px; border-style: dotted;'>
+                                        <i id='image-icon-content' class='bi bi-images fs-2 opacity-50'></i>
+                                        <img src='' id='preview-img-content' class='border'
+                                            style='width: 100%; height: 300px; display:none; object-fit: contain;' alt=''>
+                                    </label>
+                                    <span id='close-image-content' class='close-image position-absolute top-0'
+                                        style='right: 5px; display:none; outline: none; cursor: pointer;'>
+                                        <i class='bi bi-x-square-fill text-danger' style='font-size: 30px'></i>
+
+                                    </span>
+                                    <input type='file' id='image-content' accept='image/*' hidden>
+                                    <input type='text' id='image-content-hidden' name='Image_Content' hidden>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label"><?= $title_content ?></label>
+                            <input type="text" class="form-control" id="title_name" name="Title_Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><?= $title_content_en ?></label>
+                            <input type="text" class="form-control" id="title_name_en" name="Title_Name_EN">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label"><?= $description_content ?></label>
+                            <textarea name="Description_Content" id="description_content" class="form-control"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><?= $description_content_en ?></label>
+                            <textarea name="Description_Content_EN" id="description_content_en" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+
                         <div class="col-md-6">
                             <label class="form-label"><?= $news_content ?></label>
 
@@ -76,7 +142,7 @@ require('../sidebar.php');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $close ?></button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal()"><?= $close ?></button>
                     <button type="submit" class="btn btn-primary" id="saveContent" check="1"><?= $save ?></button>
                 </div>
             </form>
@@ -208,5 +274,14 @@ require('../sidebar.php');
                 .catch(error => console.error(error));
         }
     });
+</script>
+<script>
+    function closeModal() {
+        $("#create-content")[0].reset();
+        $("#create-content").validate().resetForm();
+        $('#preview-img-content').hide();
+        $('#close-image-content').hide();
+        $('#image-icon-content').show();
+    }
 </script>
 <script src="../js/content_company.js"></script>

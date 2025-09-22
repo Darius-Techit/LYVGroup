@@ -22,6 +22,28 @@ require('../sidebar.php');
                                     ?>
                                 </select>
                             </div>
+                            <div class="col-4">
+                                <label class="form-label"><?= $user_date ?></label>
+                                <div class="d-flex align-items-center">
+                                    <div class="input-group w-40">
+                                        <span class="input-group-text"><?= $from ?></span>
+                                        <input type="date" class="form-control" name="User_Date_From" id="User_Date_From">
+                                    </div>
+                                    <span class="mx-2">~</span>
+                                    <div class="input-group w-40">
+                                        <span class="input-group-text"><?= $to ?></span>
+                                        <input type="date" class="form-control" name="User_Date_To" id="User_Date_To">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label"><?= $position_level ?></label>
+                                <select class="form-select" aria-label="Default select example" id="Position_Level" name="Position_Level">
+                                    <option selected=""></option>
+                                    <option value="CN">Công nhân</option>
+                                    <option value="VP">Văn phòng</option>
+                                </select>
+                            </div>
                             <div class="col-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
                                 <button type="submit" class="btn btn-primary form-control" onclick="onQueryWorkList()">
@@ -241,27 +263,115 @@ require('../sidebar.php');
     </div>
 </div>
 <!-- Modal List Applicant -->
-<div class="modal fade" id="modalListApply" tabindex="-1">
+<div class="modal fade" id="modalListApply" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form id="create-content" enctype="multipart/form-data" role="form">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal_title_ListApply"></h5>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_title_ListApply"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-3">
+                        <label class="form-label"><?= $progress_status ?></label>
+                        <select class="form-select" aria-label="Default select example" id="SProcessing_Status" name="SProcessing_Status">
+                            <option selected=""></option>
+                            <option value="Tiếp nhận">Tiếp nhận</option>
+                            <option value="Không phù hợp">Không phù hợp</option>
+                            <option value="Đã liên hệ">Đã liên hệ</option>
+                            <option value="Không liên lạc được">Không liên lạc được</option>
+                            <option value="Phỏng vấn">Phỏng vấn</option>
+                            <option value="Không đến phỏng vấn">Không đến phỏng vấn</option>
+                            <option value="Nhận việc">Nhận việc</option>
+                            <option value="Từ chối nhận việc">Từ chối nhận việc</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label"><?= $date_applicant ?></label>
+                        <div class="d-flex align-items-center">
+                            <div class="input-group w-40">
+                                <span class="input-group-text"><?= $from ?></span>
+                                <input type="date" class="form-control" name="Upload_Date_From" id="Upload_Date_From">
+                            </div>
+
+                            <span class="mx-2">~</span>
+
+                            <div class="input-group w-40">
+                                <span class="input-group-text"><?= $to ?></span>
+                                <input type="date" class="form-control" name="Upload_Date_To" id="Upload_Date_To">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2" style="align-self: flex-end;">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="submit" class="btn btn-primary form-control" onclick="ShowListApply()">
+                            <i class="bi bi-search"></i> <?= $search ?></button>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-md-12 col-sm-12 mb-3"
+                        style="display: flex; gap: 10px; align-items: center;">
+
+                        <button type="button" class="btn btn-outline-warning"
+                            onclick="editListA()"><i class="bi bi-pencil-square"></i> <?= $edit ?>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger"
+                            onclick="removeListA()"><i class="bi bi-trash"></i> <?= $delete ?>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="tb_list_applicant" class="table table-striped table-bordered zero-configuration" style="text-align: center;width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $fullName ?></th>
+                                <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $phone ?></th>
+                                <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $birthday ?></th>
+                                <th style="background-color: #337ab7; color: #fff; text-align: center;">Email</th>
+                                <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $progress_status ?></th>
+                                <th style="background-color: #337ab7; color: #fff; text-align: center;"><?= $file_name ?></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $close ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal Processing Status -->
+<div class="modal fade show" id="modalPro_Status" tabindex="-1">
+    <div class="modal-dialog" style="margin-top: 100px;">
+        <div class="modal-content">
+            <form id="create-processstatus" enctype="multipart/form-data" role="form">
+                <div class="modal-header" style="background: #337ab7; color: white;">
+                    <h5 class="modal-title" id="modal-title-status"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
-                        <table id="tb_list_applicant" class="table table-striped table-bordered zero-configuration" style="text-align: center;width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th style="background-color: #337ab7; color: #fff; text-align: center;">FullName</th>
-                                    <th style="background-color: #337ab7; color: #fff; text-align: center;">Phone</th>
-                                    <th style="background-color: #337ab7; color: #fff; text-align: center;">Email</th>
-                                    <th style="background-color: #337ab7; color: #fff; text-align: center;">File Name</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    <input type="hidden" class="form-control" name="ID_Status" id="ID_Status">
+                    <input type="hidden" class="form-control" name="ID_Dep" id="ID_Dep">
+
+                    <div class="col-md-12">
+                        <label class="form-label"><?= $progress_status ?></label>
+                        <select class="form-select" aria-label="Default select example" id="Processing_Status" name="Processing_Status">
+                            <option selected=""></option>
+                            <option value="Tiếp nhận">Tiếp nhận</option>
+                            <option value="Không phù hợp">Không phù hợp</option>
+                            <option value="Đã liên hệ">Đã liên hệ</option>
+                            <option value="Không liên lạc được">Không liên lạc được</option>
+                            <option value="Phỏng vấn">Phỏng vấn</option>
+                            <option value="Không đến phỏng vấn">Không đến phỏng vấn</option>
+                            <option value="Nhận việc">Nhận việc</option>
+                            <option value="Từ chối nhận việc">Từ chối nhận việc</option>
+                        </select>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $close ?></button>
+                    <button type="submit" class="btn btn-primary" id="saveStatus"><?= $save ?></button>
                 </div>
             </form>
         </div>

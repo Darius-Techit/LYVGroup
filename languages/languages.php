@@ -36,12 +36,16 @@ switch ($languages) {
         $update_error = "Chỉnh sửa thất bại";
         $deleted_successfully = "Xóa thành công";
         $deleted_error = "Xóa thất bại";
+        $from = "Từ";
+        $to = "Đến";
+        $user_date = "Ngày Tạo";
 
         //information
         $panel = "Khung";
         $information_picture = "Thông tin hình ảnh";
 
         //department
+
         $department_name = "Tên bộ phận";
         $department_nameEN = "Tên bộ phận (Tiếng anh)";
 
@@ -72,9 +76,23 @@ switch ($languages) {
         $office_staff = "Văn phòng";
         $dep_already = "Tên bộ phận đã tồn tại";
 
+        // List Applicant
+        $progress_status = "Trạng thái xử lý";
+        $date_applicant = "Ngày nộp đơn";
+        $fullName = "Họ và tên";
+        $phone = "Số điện thoại";
+        $birthday = "Ngày sinh";
+        $file_name = "Tên tập tin";
+
         //content_company
-        $news_content = "Nội dung tin tức";
-        $news_contentEN = "Nội dung tin tức (Tiếng anh)";
+        $image_content = "Hình ảnh";
+        $title_content = "Tiêu đề";
+        $description_content = "Mô tả";
+        $news_content = "Nội dung";
+
+        $title_content_en = "Tiêu đề (Tiếng anh)";
+        $description_content_en = "Mô tả (Tiếng anh)";
+        $news_contentEN = "Nội dung (Tiếng anh)";
 
         //user management
         $id_already = "ID người dùng đã tồn tại";
@@ -109,6 +127,9 @@ switch ($languages) {
         $update_error = "Update Error";
         $deleted_successfully = "Deleted Successfully";
         $deleted_error = "Delete Error";
+        $from = "From";
+        $to = "To";
+        $user_date = "Created Date";
 
         //information
         $panel = "Panel";
@@ -145,9 +166,24 @@ switch ($languages) {
         $office_staff = "Office Staff";
         $dep_already = "Department Name already exists";
 
+        // List Applicant
+        $progress_status = "Progress Status";
+        $date_applicant = "Date Applicant";
+        $fullName = "Full Name";
+        $phone = "Phone";
+        $birthday = "Birthday";
+        $file_name = "File Name";
+
         //content_company
-        $news_content = "News Content";
-        $news_contentEN = "News Content (English)";
+        $image_content = "Image";
+        $title_content = "Title";
+        $description_content = "Description";
+        $news_content = "Content";
+
+        $title_content_en = "Title (English)";
+        $description_content_en = "Description (English)";
+        $news_contentEN = "Content (English)";
+
 
         //user management
         $id_already = "ID User already exists";

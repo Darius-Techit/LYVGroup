@@ -10,8 +10,18 @@ require('../sidebar.php');
                         <h5 class="card-title"><?= $information ?></h5>
                         <div class="row">
                             <div class="col-4">
-                                <label for="inputNanme4" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="inputNanme4">
+                                <label class="form-label"><?= $user_date ?></label>
+                                <div class="d-flex align-items-center">
+                                    <div class="input-group w-40">
+                                        <span class="input-group-text"><?= $from ?></span>
+                                        <input type="date" class="form-control" name="User_Date_From" id="User_Date_From">
+                                    </div>
+                                    <span class="mx-2">~</span>
+                                    <div class="input-group w-40">
+                                        <span class="input-group-text"><?= $to ?></span>
+                                        <input type="date" class="form-control" name="User_Date_To" id="User_Date_To">
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-2" style="align-self: flex-end;">
                                 <label class="form-label">&nbsp;</label>
@@ -48,39 +58,6 @@ require('../sidebar.php');
                     </div>
                 </div>
             </div>
-            <!-- <div class="col-lg-5 px-1">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Information Picture</h5>
-                        <div class="row" style="margin-top: 30px">
-                            <div class="col-md-12 col-sm-12 mb-3"
-                                style="display: flex; gap: 10px; align-items: center;">
-
-                                <button type="button" class="btn btn-outline-primary"
-                                    onclick="addInfo(1)"><i class="bi bi-plus-square"></i> Add
-                                </button>
-                                <button type="button" class="btn btn-outline-warning"
-                                    onclick="editInfo()"><i class="bi bi-pencil-square"></i> Edit
-                                </button>
-                                <button type="button" class="btn btn-outline-danger"
-                                    onclick="removeInfo()"><i class="bi bi-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-
-                            <table id="tb_info_pic" class="table table-striped table-bordered zero-configuration" style="text-align: center;width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">ID Image</th>
-                                        <th style="background-color: #337ab7; color: #fff; text-align: center;">Image</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </section>
 </main>
