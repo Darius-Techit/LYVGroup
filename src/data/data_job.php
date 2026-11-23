@@ -225,4 +225,11 @@ if ($Action  == 'loadJobs') {
         ?>
 
         <!-- Next -->
-        <li class="page-item <?= ($page >= $total_pages) ? 'disabled
+        <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+            <a class="page-link page-link-ajax" data-page="<?= min($total_pages, $page + 1) ?>" href="#">&raquo;</a>
+        </li>
+
+    </ul>
+</nav>
+<?php } // hết phân trang ?>
+<?php } ?>

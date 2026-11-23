@@ -440,4 +440,11 @@ $rs_banner = fetch_to_array($sql_banner);
     // Nút mũi tên dưới banner: cuộn mượt xuống phần nội dung
     const bannerScroll = document.querySelector(".home-banner__scroll");
     if (bannerScroll) {
-        bannerScroll.addEventListener("click", function(
+        bannerScroll.addEventListener("click", function(e) {
+            e.preventDefault();
+            document.getElementById("home-content").scrollIntoView({
+                behavior: "smooth"
+            });
+        });
+    }
+</script>

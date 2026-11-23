@@ -16,22 +16,33 @@ $(document).ready(function () {
  // })
 });
 
+// khung chờ tải: cùng hình dạng thẻ việc làm (CSS .hj-skel trong assets/css/job-list.css)
 function showSkeleton(count = 6) {
-  let skeletons = '<div class="row g-3 skeleton">';
+  let skeletons = '<div class="hj-grid">';
 
   for (let i = 0; i < count; i++) {
     skeletons += `
-      <div class="col-md-4"> 
-      <div class="card-job mb-3 p-4 placeholder-glow h-100">
-        <h5 class="placeholder col-6"></h5>
-        <p class="placeholder col-9"></p>
-        <p class="placeholder col-7"></p>
-        <p class="placeholder col-5"></p>
-      </div>
+      <div class="hj-card hj-skel" aria-hidden="true">
+        <div class="hj-card__head">
+          <span class="hj-logo"></span>
+          <div class="hj-card__titles">
+            <span class="hj-skel__line" style="width: 45%"></span>
+            <span class="hj-skel__line hj-skel__line--title" style="width: 80%"></span>
+          </div>
+        </div>
+        <div>
+          <span class="hj-skel__line" style="width: 90%"></span>
+          <span class="hj-skel__line" style="width: 55%"></span>
+          <span class="hj-skel__line" style="width: 65%"></span>
+        </div>
+        <div class="hj-card__foot">
+          <span class="hj-skel__btn"></span>
+          <span class="hj-skel__btn"></span>
+        </div>
       </div>
     `;
   }
-  skeletons += '</div>'; 
+  skeletons += '</div>';
 
   $("#job_list").html(skeletons);
 }

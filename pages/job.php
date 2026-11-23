@@ -256,4 +256,23 @@ include('../src/conn.php');
         // Đóng dropdown khi click ra ngoài
         document.addEventListener("click", function(e) {
             if (!input.contains(e.target) && !suggestionList.contains(e.target)) {
-        
+                suggestionList.classList.remove("show");
+            }
+        });
+    });
+</script>
+<script>
+    function equalizeJobNameHeights() {
+  const names = document.querySelectorAll('.job-name');
+  let maxHeight = 0;
+  names.forEach(el => {
+    el.style.minHeight = 'auto';
+    if (el.offsetHeight > maxHeight) maxHeight = el.offsetHeight;
+  });
+  names.forEach(el => el.style.minHeight = maxHeight + 'px');
+}
+
+window.addEventListener('load', equalizeJobNameHeights);
+window.addEventListener('resize', equalizeJobNameHeights);
+
+</script>
