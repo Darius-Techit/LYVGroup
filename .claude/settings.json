@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s --max-time 30 -H \"Host: lacty.com.vn\" \"http://192.168.0.244/LYVGroup/\" -o \"C:/Users/ADMINI~1/AppData/Local/Temp/claude/5597c50e3960fb9c/edf936fa-c8eb-4752-9fb0-48710a85daef/scratchpad/live2.html\" -w \"%{http_code} %{size_download}\\\\n\")"
+    ]
+  }
+}

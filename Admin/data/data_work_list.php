@@ -1,0 +1,251 @@
+<?php
+session_start();
+include($_SERVER['DOCUMENT_ROOT'] . '/LYVGroup/Admin/connect.php');
+include_once("../languages/languages.php");
+@$userid = $_SESSION['userid'];
+$Action = $_REQUEST['Action'];
+
+if ($Action == "GetDataWorkList") {
+    $DepName = isset($_GET['DepName']) ? $_GET['DepName'] : "";
+    $dateFrom = isset($_GET['User_Date_From']) ? $_GET['User_Date_From'] : "";
+    $dateTo = isset($_GET['User_Date_To']) ? $_GET['User_Date_To'] : "";
+    $position_level = isset($_GET['Position_Level']) ? $_GET['Position_Level'] : "";
+    $expire = isset($_GET['sr_Expire']) ? $_GET['sr_Expire'] : "";
+	$hidden = isset($_GET['sr_Hidden']) ? $_GET['sr_Hidden'] : "";
+	$show = isset($_GET['sr_Show']) ? $_GET['sr_Show'] : "";
+
+
+    $where = "1=1";
+    if ($expire == 1) {
+        //$where .= "AND DATEDIFF(DAY, GETDATE(), wl.Date_Applications)+1 <= 5 AND DATEDIFF(DAY, GETDATE(), wl.Date_Applications)+1 >= 0 ";
+		$where .= "AND DATEDIFF(DAY, GETDATE(), wl.Date_Applications)+1 <= 4";
+    }
+	if ($hidden ==1){
+		$where .= "AND wl.[STATUS] <>1";
+	}
+	if ($show ==1){
+		$where .= "AND wl.[STATUS] =1";
+	}
+
+    if ($DepName != '') {
+        $where .= " AND dc.Dep_Name LIKE N'%$DepName%'";
+    }
+    if ($dateTo != '' && $dateFrom == '') {
+        $where .= " AND CONVERT(VARCHAR(20),wl.UserDate,23) = '$dateTo' ";
+    }
+    if ($dateFrom != '' && $dateTo == '') {
+        $where .= " AND CONVERT(VARCHAR(20),wl.UserDate,23) = '$dateFrom' ";
+    }
+    if ($dateTo != '' && $dateFrom != '') {
+        $where .= " AND CONVERT(VARCHAR(20),wl.UserDate,23) BETWEEN '$dateFrom' AND '$dateTo' ";
+    }
+    if ($position_level != '') {
+        $where .= "AND wl.Position_Level  ='$position_level'";
+    }
+    $sqlDataWL = "  SELECT  wl.ID, dc.Dep_ID , dc.Dep_Name, wl.Job_Description,wl.Job_DescriptionEN, wl.Request_Work,wl.Request_WorkEN,
+                            wl.Degree,wl.DegreeEN, wl.Gender,wl.GenderEN, wl.Age_Range,wl.Age_RangeEN, wl.Salary,wl.SalaryEN,
+                            wl.Number_Vacancies, wl.Work_Experience,wl.Work_ExperienceEN, wl.Working_Time,wl.Working_TimeEN,
+                            wl.Job_Hot,CONVERT(VARCHAR(20),wl.UserDate,23) UserDate, wl.CreateDate,CONVERT(VARCHAR(20),wl.Date_Applications,23)Date_Applications, wl.Position_Level,
+                            wl.Compensation_Benefits, wl.Compensation_BenefitsEN, wl.[STATUS],
+                            (SELECT COUNT(Dep_ID) FROM CO_ListApplicant WHERE Dep_ID=wl.Dep_ID AND ISNULL(Processing_Status,'')='') IDListApply
+                    FROM CO_WorkList wl
+                    LEFT JOIN CO_DepartmentCompany AS dc ON dc.Dep_ID=wl.Dep_ID
+                    WHERE $where
+                    ORDER BY wl.UserDate DESC";
+    $dataWL = fetch_to_array($sqlDataWL);
+    echo json_encode($dataWL);
+}
+if ($Action == "InsertWL") {
+    $Dep_ID = isset($_POST['DepID']) ? $_POST['DepID'] : "";
+    $Number_Vacancies = isset($_POST['Number_Vacancies']) ? $_POST['Number_Vacancies'] : "";
+    // $Degree = isset($_POST['Degree']) ? $_POST['Degree'] : [];
+    // $DegreeStr = is_array($Degree) ? implode(",", $Degree) : $Degree;
+    // $DegreeEN = isset($_POST['DegreeEN']) ? $_POST['DegreeEN'] : [];
+    // $DegreeENStr = is_array($DegreeEN) ? implode(",", $DegreeEN) : $DegreeEN;
+    $Degree = isset($_POST['Degree']) ? $_POST['Degree'] : "";
+    $DegreeEN = isset($_POST['DegreeEN']) ? $_POST['DegreeEN'] : "";
+    $Gender = isset($_POST['Gender']) ? $_POST['Gender'] : "";
+    $GenderEN = isset($_POST['GenderEN']) ? $_POST['GenderEN'] : "";
+    $Age_Range = isset($_POST['Age_Range']) ? $_POST['Age_Range'] : "";
+    $Age_RangeEN = isset($_POST['Age_RangeEN']) ? $_POST['Age_RangeEN'] : "";
+    $Salary = isset($_POST['Salary']) ? $_POST['Salary'] : "";
+    $SalaryEN = isset($_POST['SalaryEN']) ? $_POST['SalaryEN'] : "";
+    $Date_Applications = isset($_POST['Application_Deadline']) ? $_POST['Application_Deadline'] : "";
+    $Position_Level = isset($_POST['Position_Level']) ? $_POST['Position_Level'] : "";
+    $Work_Experience = isset($_POST['Work_Experience']) ? $_POST['Work_Experience'] : "";
+    $Work_ExperienceEN = isset($_POST['Work_ExperienceEN']) ? $_POST['Work_ExperienceEN'] : "";
+    $Working_Time = isset($_POST['Working_Time']) ? $_POST['Working_Time'] : "";
+    $Working_TimeEN = isset($_POST['Working_TimeEN']) ? $_POST['Working_TimeEN'] : "";
+    $Job_Description = str_replace("'", "''", isset($_POST['Job_Description_input']) ? $_POST['Job_Description_input'] : "");
+    $Job_DescriptionEN = str_replace("'", "''", isset($_POST['Job_DescriptionEN_input']) ? $_POST['Job_DescriptionEN_input'] : "");
+    $Request_Work = str_replace("'", "''", isset($_POST['Request_Work_input']) ? $_POST['Request_Work_input'] : "");
+    $Request_WorkEN = str_replace("'", "''", isset($_POST['Request_WorkEN_input']) ? $_POST['Request_WorkEN_input'] : "");
+    $Compensation_Benefits = str_replace("'", "''", isset($_POST['Compensation_Benefits_input']) ? $_POST['Compensation_Benefits_input'] : "");
+    $Compensation_BenefitsEN = str_replace("'", "''", isset($_POST['Compensation_BenefitsEN_input']) ? $_POST['Compensation_BenefitsEN_input'] : "");
+    $Job_Hot = isset($_POST['Job_Hot']) ? 1 : 0;
+    $STATUS = isset($_POST['STATUS']) ? 1 : 0;
+
+    $sql_exists = "SELECT 1 FROM CO_WorkList WHERE Dep_ID='$Dep_ID'";
+    $rs_exists = fetch_to_array($sql_exists);
+    $tmp_count = count($rs_exists);
+    if ($tmp_count != 0) {
+        echo json_encode(array("status" => "Error", "message" => $dep_already));
+        exit;
+    } else {
+        $sql_Insert = "INSERT INTO CO_WorkList
+                (
+                    Dep_ID,
+                    Job_Description,
+                    Job_DescriptionEN,
+                    Request_Work,
+                    Request_WorkEN,
+                    Degree,
+                    DegreeEN,
+                    Gender,
+                    GenderEN,
+                    Age_Range,
+                    Age_RangeEN,
+                    Salary,
+                    SalaryEN,
+                    Number_Vacancies,
+                    Date_Applications,
+                    Position_Level,
+                    Work_Experience,
+                    Work_ExperienceEN,
+                    Working_Time,
+                    Working_TimeEN,
+                    Job_Hot,
+                    STATUS,
+                    Compensation_Benefits,
+                    Compensation_BenefitsEN,
+                    UserID,
+                    UserDate,
+                    CreateDate
+                )
+                VALUES
+                (  
+                    '$Dep_ID',
+                    N'$Job_Description',
+                    N'$Job_DescriptionEN',
+                    N'$Request_Work',
+                    N'$Request_WorkEN',
+                    N'$Degree',
+                    N'$DegreeEN',
+                    N'$Gender',
+                    N'$GenderEN',
+                    N'$Age_Range',
+                    N'$Age_RangeEN',
+                    N'$Salary',
+                    N'$SalaryEN',
+                    N'$Number_Vacancies',
+                    '$Date_Applications',
+                    N'$Position_Level',
+                    N'$Work_Experience',
+                    N'$Work_ExperienceEN',
+                    N'$Working_Time',
+                    N'$Working_TimeEN',
+                    '$Job_Hot',
+                    '$STATUS',
+                    N'$Compensation_Benefits',
+                    N'$Compensation_BenefitsEN',
+                    '$userid',
+                    GETDATE(),
+                    GETDATE()
+                )";
+        $rs_Insert = execute_query($sql_Insert);
+        if ($rs_Insert > 0) {
+            echo json_encode(array("status" => "Success", "message" => $insert_successfully));
+        } else {
+            echo json_encode(array("status" => "Error", "message" => $insert_error));
+        }
+    }
+}
+if ($Action == "UpdateWL") {
+    $ID = isset($_POST['ID']) ? $_POST['ID'] : "";
+    $Dep_ID = isset($_POST['DepID']) ? $_POST['DepID'] : "";
+    $Number_Vacancies = isset($_POST['Number_Vacancies']) ? $_POST['Number_Vacancies'] : "";
+    // $Degree = isset($_POST['Degree']) ? $_POST['Degree'] : [];
+    // $DegreeStr = is_array($Degree) ? implode(",", $Degree) : $Degree;
+    // $DegreeEN = isset($_POST['DegreeEN']) ? $_POST['DegreeEN'] : [];
+    // $DegreeENStr = is_array($DegreeEN) ? implode(",", $DegreeEN) : $DegreeEN;
+    $Degree = isset($_POST['Degree']) ? $_POST['Degree'] : "";
+    $DegreeEN = isset($_POST['DegreeEN']) ? $_POST['DegreeEN'] : "";
+
+    $Gender = isset($_POST['Gender']) ? $_POST['Gender'] : "";
+    $GenderEN = isset($_POST['GenderEN']) ? $_POST['GenderEN'] : "";
+    $Age_Range = isset($_POST['Age_Range']) ? $_POST['Age_Range'] : "";
+    $Age_RangeEN = isset($_POST['Age_RangeEN']) ? $_POST['Age_RangeEN'] : "";
+    $Salary = isset($_POST['Salary']) ? $_POST['Salary'] : "";
+    $SalaryEN = isset($_POST['SalaryEN']) ? $_POST['SalaryEN'] : "";
+    $Date_Applications = isset($_POST['Application_Deadline']) ? $_POST['Application_Deadline'] : "";
+    $Position_Level = isset($_POST['Position_Level']) ? $_POST['Position_Level'] : "";
+    $Work_Experience = isset($_POST['Work_Experience']) ? $_POST['Work_Experience'] : "";
+    $Work_ExperienceEN = isset($_POST['Work_ExperienceEN']) ? $_POST['Work_ExperienceEN'] : "";
+    $Working_Time = isset($_POST['Working_Time']) ? $_POST['Working_Time'] : "";
+    $Working_TimeEN = isset($_POST['Working_TimeEN']) ? $_POST['Working_TimeEN'] : "";
+    $Job_Description = str_replace("'", "''", isset($_POST['Job_Description_input']) ? $_POST['Job_Description_input'] : "");
+    $Job_DescriptionEN = str_replace("'", "''", isset($_POST['Job_DescriptionEN_input']) ? $_POST['Job_DescriptionEN_input'] : "");
+    $Request_Work = str_replace("'", "''", isset($_POST['Request_Work_input']) ? $_POST['Request_Work_input'] : "");
+    $Request_WorkEN = str_replace("'", "''", isset($_POST['Request_WorkEN_input']) ? $_POST['Request_WorkEN_input'] : "");
+    $Compensation_Benefits = str_replace("'", "''", isset($_POST['Compensation_Benefits_input']) ? $_POST['Compensation_Benefits_input'] : "");
+    $Compensation_BenefitsEN = str_replace("'", "''", isset($_POST['Compensation_BenefitsEN_input']) ? $_POST['Compensation_BenefitsEN_input'] : "");
+    $Job_Hot = isset($_POST['Job_Hot']) ? 1 : 0;
+    $STATUS = isset($_POST['STATUS']) ? 1 : 0;
+
+    $sql_Update = "UPDATE CO_WorkList SET
+                Job_Description = N'$Job_Description',
+                Job_DescriptionEN = N'$Job_DescriptionEN',
+                Request_Work = N'$Request_Work',
+                Request_WorkEN = N'$Request_WorkEN',
+                Degree = N'$Degree',
+                DegreeEN = N'$DegreeEN',
+                Gender = N'$Gender',
+                GenderEN = N'$GenderEN',
+                Age_Range = N'$Age_Range',
+                Age_RangeEN = N'$Age_RangeEN',
+                Salary = N'$Salary',
+                SalaryEN = N'$SalaryEN',
+                Date_Applications = '$Date_Applications',
+                Position_Level = N'$Position_Level',
+                Number_Vacancies = N'$Number_Vacancies',
+                Work_Experience = N'$Work_Experience',
+                Work_ExperienceEN = N'$Work_ExperienceEN',
+                Working_Time = N'$Working_Time',
+                Working_TimeEN = N'$Working_TimeEN',
+                Compensation_Benefits = N'$Compensation_Benefits',
+                Compensation_BenefitsEN = N'$Compensation_BenefitsEN',
+                UserID = '$userid',
+                UserDate = GETDATE(),
+                Job_Hot = '$Job_Hot',
+                STATUS = '$STATUS'
+                WHERE ID = '$ID'";
+    // echo $sql_Update;
+    $rs_Update = execute_query($sql_Update);
+    if ($rs_Update > 0) {
+        echo json_encode(array("status" => "Success", "message" => $update_successfully));
+    } else {
+        echo json_encode(array("status" => "Error", "message" => $update_error));
+    }
+}
+if ($Action == "DeleteWL") {
+    $ID = isset($_POST['ID']) ? $_POST['ID'] : "";
+    $Dep_ID = isset($_POST['Dep_ID']) ? $_POST['Dep_ID'] : "";
+
+    $sql_check = "  SELECT * FROM CO_WorkList a
+                    WHERE EXISTS (SELECT 1 FROM CO_ListApplicant b
+                                  WHERE b.Dep_ID=a.Dep_ID )
+                          AND a.Dep_ID ='$Dep_ID'";
+    $rs_check = fetch_to_array($sql_check);
+    if (count($rs_check) > 0) {
+        echo json_encode(array("status" => "Error", "message" => $cannot_delete_la));
+        exit();
+    } else {
+        $sql_Delete = "DELETE FROM CO_WorkList WHERE ID = '$ID' AND Dep_ID = '$Dep_ID'";
+        $rs_Delete = execute_query($sql_Delete);
+        if ($rs_Delete > 0) {
+            echo json_encode(array("status" => "Success", "message" => $deleted_successfully));
+        } else {
+            echo json_encode(array("status" => "Error", "message" => $deleted_error));
+        }
+    }
+}

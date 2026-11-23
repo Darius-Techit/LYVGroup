@@ -1,0 +1,82 @@
+{
+    "enabled": true,
+    "mode": "auto",
+    "manualSeason": "winter",
+    "pages": "all",
+    "layer": "under",
+    "mobile": "off",
+    "seasons": {
+        "spring": {
+            "from": 1,
+            "to": 3,
+            "shapes": [
+                "flower",
+                "petal"
+            ],
+            "colors": [
+                "#ffd24d",
+                "#f5b335",
+                "#ffb3c7",
+                "#ff8fab"
+            ],
+            "motion": "sway",
+            "size": 18,
+            "qty": 60,
+            "speed": 7
+        },
+        "summer": {
+            "from": 4,
+            "to": 6,
+            "shapes": [
+                "petal",
+                "sparkle"
+            ],
+            "colors": [
+                "#e8141c",
+                "#ff5a36",
+                "#ff8a3d",
+                "#ffd24d"
+            ],
+            "motion": "sway",
+            "size": 16,
+            "qty": 50,
+            "speed": 8
+        },
+        "autumn": {
+            "from": 7,
+            "to": 9,
+            "shapes": [
+                "leaf",
+                "maple"
+            ],
+            "colors": [
+                "#e07a1f",
+                "#c4561d",
+                "#f5b335",
+                "#a0522d"
+            ],
+            "motion": "flutter",
+            "size": 22,
+            "qty": 45,
+            "speed": 7
+        },
+        "winter": {
+            "from": 10,
+            "to": 12,
+            "shapes": [
+                "dot",
+                "pine",
+                "flake"
+            ],
+            "colors": [
+                "#ffffff",
+                "#ffffff",
+                "#a8d4f2"
+            ],
+            "motion": "sway",
+            "size": 25,
+            "qty": 110,
+            "speed": 10
+        }
+    }
+}

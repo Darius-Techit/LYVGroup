@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Nộp file này trong Google Search Console: https://www.lacty.com.vn/LYVGroup/sitemap.xml
+     Khi thêm trang mới hoặc cập nhật nội dung, thêm/sửa <url> và <lastmod> tương ứng. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://www.lacty.com.vn/LYVGroup/</loc>
+    </url>
+    <url>
+        <loc>https://www.lacty.com.vn/LYVGroup/pages/intro.php?lang=vn</loc>
+    </url>
+    <url>
+        <loc>https://www.lacty.com.vn/LYVGroup/pages/new.php?lang=vn</loc>
+    </url>
+    <url>
+        <loc>https://www.lacty.com.vn/LYVGroup/pages/job.php?lang=vn</loc>
+    </url>
+    <url>
+        <loc>https://www.lacty.com.vn/LYVGroup/pages/environment.php?lang=vn</loc>
+        <lastmod>2026-11-05</lastmod>
+    </url>
+    <url>
+        <loc>https://www.lacty.com.vn/LYVGroup/pages/environment.php?lang=en</loc>
+        <lastmod>2026-11-05</lastmod>
+    </url>
+</urlset>
